@@ -1,4 +1,4 @@
-package com.kabos.bus.model
+package io.github.bus
 
 enum class DayType {
     Weekday,
