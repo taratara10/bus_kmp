@@ -30,5 +30,6 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":shared")
+include(":core:domain")
 include(":core:model")
 include(":feature:clock")
