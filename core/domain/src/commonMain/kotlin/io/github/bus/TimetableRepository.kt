@@ -3,16 +3,16 @@ package io.github.bus
 class TimetableRepository {
     fun getTimetable(stationName: StationName): Result<List<Timetable>> {
         return when (stationName) {
-            StationName("田喜野井") -> return Result.success(takinoi)
-            StationName("津田沼_津08") -> return Result.success(tsudanuma)
+            StationName.takinoi -> return Result.success(takinoiTimetable)
+            StationName.tsudanuma -> return Result.success(tsudanumaTimetable)
             else -> Result.failure(IllegalArgumentException("定義のない駅名です"))
         }
     }
 }
 
-private val takinoi = listOf(
+private val takinoiTimetable = listOf(
     Timetable(
-        stationName = StationName("田喜野井"),
+        stationName = StationName.takinoi,
         rows = listOf(
             TimetableRow(hour = 6, minutes = listOf(0, 15, 24, 35, 42, 55)),
             TimetableRow(hour = 7, minutes = listOf(10, 22, 27, 34, 47)),
@@ -34,7 +34,7 @@ private val takinoi = listOf(
         dayType = DayType.Weekday
     ),
     Timetable(
-        stationName = StationName("田喜野井"),
+        stationName = StationName.takinoi,
         rows = listOf(
             TimetableRow(hour = 6, minutes = listOf(2, 32)),
             TimetableRow(hour = 7, minutes = listOf(2, 21, 32, 55)),
@@ -57,7 +57,7 @@ private val takinoi = listOf(
         dayType = DayType.Saturday
     ),
     Timetable(
-        stationName = StationName("田喜野井"),
+        stationName = StationName.takinoi,
         rows = listOf(
             TimetableRow(hour = 6, minutes = listOf(2, 32)),
             TimetableRow(hour = 7, minutes = listOf(2, 21, 32, 55)),
@@ -81,9 +81,9 @@ private val takinoi = listOf(
     )
 )
 
-private val tsudanuma = listOf(
+private val tsudanumaTimetable = listOf(
     Timetable(
-        stationName = StationName("津田沼_津08"),
+        stationName = StationName.tsudanuma,
         rows = listOf(
             TimetableRow(hour = 6, minutes = listOf(25, 42, 58)),
             TimetableRow(hour = 7, minutes = listOf(27, 42)),
@@ -106,7 +106,7 @@ private val tsudanuma = listOf(
         dayType = DayType.Weekday
     ),
     Timetable(
-        stationName = StationName("津田沼_津08"),
+        stationName = StationName.tsudanuma,
         rows = listOf(
             TimetableRow(hour = 6, minutes = listOf(23, 57)),
             TimetableRow(hour = 7, minutes = listOf(28, 58)),
