@@ -37,6 +37,7 @@ kotlin {
             implementation(projects.core.model)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.coroutines.core)
+            implementation(libs.kotlin.result)
         }
     }
 }
