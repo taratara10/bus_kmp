@@ -5,6 +5,7 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.getOr
+import io.github.kabos.repository.TimetableRepository
 import kotlinx.datetime.LocalTime
 
 class GetBusDepartureTimeUseCase(private val timetableRepository: TimetableRepository) {
