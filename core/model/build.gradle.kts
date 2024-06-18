@@ -50,7 +50,6 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.junit)
         }
-
     }
 }
 
