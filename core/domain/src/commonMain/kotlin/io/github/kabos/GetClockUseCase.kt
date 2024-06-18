@@ -1,4 +1,4 @@
-package io.github.bus
+package io.github.kabos
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok

@@ -1,6 +1,8 @@
-package io.github.bus
+package io.github.kabos
 
-import com.github.michaelbull.result.*
+import com.github.michaelbull.result.Err
+import com.github.michaelbull.result.Ok
+import com.github.michaelbull.result.Result
 
 class TimetableRepository {
     fun getTimetable(stationName: StationName): Result<List<Timetable>, Exception> {
