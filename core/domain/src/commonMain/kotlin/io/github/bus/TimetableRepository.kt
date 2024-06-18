@@ -1,11 +1,13 @@
 package io.github.bus
 
+import com.github.michaelbull.result.*
+
 class TimetableRepository {
-    fun getTimetable(stationName: StationName): Result<List<Timetable>> {
+    fun getTimetable(stationName: StationName): Result<List<Timetable>, Exception> {
         return when (stationName) {
-            StationName.takinoi -> return Result.success(takinoiTimetable)
-            StationName.tsudanuma -> return Result.success(tsudanumaTimetable)
-            else -> Result.failure(IllegalArgumentException("定義のない駅名です"))
+            StationName.takinoi -> return Ok(takinoiTimetable)
+            StationName.tsudanuma -> return Ok(tsudanumaTimetable)
+            else -> Err(IllegalArgumentException("定義のない駅名です"))
         }
     }
 }
