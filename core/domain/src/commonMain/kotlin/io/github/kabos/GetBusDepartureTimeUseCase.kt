@@ -5,6 +5,7 @@ import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.getOr
+import com.github.michaelbull.result.runCatching
 import io.github.kabos.repository.TimetableRepository
 import kotlinx.datetime.LocalTime
 
@@ -30,7 +31,12 @@ private fun List<Timetable>.findTimetableByDayType(
 fun List<TimetableRow>.convertToLocalTime(): List<LocalTime> {
     return this.map { row ->
         row.minutes.map { minute ->
-            LocalTime(hour = row.hour, minute = minute)
+            // Throw IllegalArgumentException if any parameter is out of range
+            runCatching {
+                LocalTime(hour = row.hour, minute = minute)
+            }
         }
-    }.flatten()
+    } // List<List<Result<LocalTime, IllegalArgumentException>>>
+        .flatten() // List<Result<LocalTime, IllegalArgumentException>>
+        .mapNotNull { it.getOr(null) } // List<LocalTime>
 }
