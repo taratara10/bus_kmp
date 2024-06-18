@@ -1,13 +1,9 @@
 package io.github.bus
 
-import kotlinx.datetime.Clock
-
-class GetClockUseCase : Flow {
-
-    operator fun invoke(currentTime: Clock.System) {
-        val a = Clock.System.now().toEpochMilliseconds()
-    }
-
+class GetClockUseCase {
+//    operator fun invoke(currentTime: Clock.System): Flow<ClockState> {
+//
+//    }
 }
 
 data class ClockState(
