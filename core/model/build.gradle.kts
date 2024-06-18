@@ -8,7 +8,6 @@ plugins {
     alias(libs.plugins.androidLibrary)
 }
 
-
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {

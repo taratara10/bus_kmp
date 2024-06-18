@@ -1,11 +1,15 @@
-package io.github.kabos
+package io.github.kabos.repository
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import io.github.kabos.DayType
+import io.github.kabos.StationName
+import io.github.kabos.Timetable
+import io.github.kabos.TimetableRow
 
-class TimetableRepository {
-    fun getTimetable(stationName: StationName): Result<List<Timetable>, Exception> {
+class DefaultTimetableRepository : TimetableRepository {
+    override fun getTimetable(stationName: StationName): Result<List<Timetable>, Exception> {
         return when (stationName) {
             StationName.takinoi -> return Ok(takinoiTimetable)
             StationName.tsudanuma -> return Ok(tsudanumaTimetable)
