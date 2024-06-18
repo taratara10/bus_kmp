@@ -23,8 +23,7 @@ class GetClockUseCase(private val timetableRepository: TimetableRepository) {
 private fun List<Timetable>.getCurrentDayTypeTimetable(
     dayType: DayType,
 ): Result<Timetable, IllegalArgumentException> {
-    return this.find { it.dayType == dayType }
-        ?.let { Ok(it) }
+    return this.find { it.dayType == dayType }?.let { Ok(it) }
         ?: Err(IllegalArgumentException("Timetable not found"))
 }
 
