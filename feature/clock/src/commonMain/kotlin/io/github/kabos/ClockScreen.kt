@@ -1,4 +1,4 @@
-package io.github.bus
+package io.github.kabos
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

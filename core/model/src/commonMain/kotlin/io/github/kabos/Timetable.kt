@@ -1,4 +1,4 @@
-package io.github.bus
+package io.github.kabos
 
 data class Timetable(
     val stationName: StationName,

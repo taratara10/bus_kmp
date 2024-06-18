@@ -1,4 +1,4 @@
-package io.github.bus
+package io.github.kabos
 
 value class StationName(val name: String) {
     companion object {

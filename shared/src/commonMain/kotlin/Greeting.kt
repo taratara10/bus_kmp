@@ -1,4 +1,4 @@
-import io.github.bus.DayType
+import io.github.kabos.DayType
 
 class Greeting {
     private val platform = getPlatform()

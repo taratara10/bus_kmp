@@ -1,4 +1,4 @@
-package io.github.bus
+package io.github.kabos
 
 import kotlinx.datetime.Clock
 
