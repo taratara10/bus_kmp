@@ -24,9 +24,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 val previewTimelines = listOf(
-    TimelineItem(departureTime = "10:00", remainingTime = "5 min"),
-    TimelineItem(departureTime = "11:00", remainingTime = "10 min"),
-    TimelineItem(departureTime = "12:00", remainingTime = "15 min"),
+    TimelineItem(departureTime = "10:00", remainingTime = "5 min later"),
+    TimelineItem(departureTime = "11:00", remainingTime = "10 min later"),
+    TimelineItem(departureTime = "12:00", remainingTime = "15 min later"),
 )
 
 data class TimelineItem(
