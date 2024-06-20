@@ -38,13 +38,18 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             commonMain.dependencies {
+                implementation(projects.shared)
+                implementation(projects.core.domain)
+                implementation(projects.core.model)
+                implementation(libs.kotlinx.datetime)
+                implementation(libs.kotlinx.coroutines.core)
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
                 implementation(compose.ui)
                 implementation(compose.components.resources)
                 implementation(compose.components.uiToolingPreview)
-                implementation(projects.shared)
+                implementation(libs.lifecycle.viewmodel.compose)
             }
         }
     }
