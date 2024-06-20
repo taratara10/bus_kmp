@@ -9,14 +9,16 @@ import kotlinx.datetime.toLocalDateTime
 enum class DayType {
     Weekday,
     Saturday,
-    Holiday,
-}
+    Holiday;
 
-fun Clock.toDayType(): DayType {
-    val dayOfWeek = this.now().toLocalDateTime(TimeZone.of("Asia/Tokyo")).dayOfWeek
-    return when (dayOfWeek) {
-        SATURDAY -> DayType.Saturday
-        SUNDAY -> DayType.Holiday
-        else -> DayType.Weekday
+    companion object {
+        fun of(clock: Clock): DayType {
+            val dayOfWeek = clock.now().toLocalDateTime(TimeZone.of("Asia/Tokyo")).dayOfWeek
+            return when (dayOfWeek) {
+                SATURDAY -> Saturday
+                SUNDAY -> Holiday
+                else -> Weekday
+            }
+        }
     }
 }
