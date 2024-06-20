@@ -47,7 +47,7 @@ fun ClockScreen(
     ) {
         when (uiState) {
             UiState.Init -> {
-                onAction(UiAction.Reload)
+                onAction(UiAction.Initialize)
             }
 
             UiState.NoBus -> {
@@ -58,7 +58,7 @@ fun ClockScreen(
                 LaunchedEffect(uiState) {
                     launch {
                         delay(1000)
-                        onAction(UiAction.Reload)
+                        onAction(UiAction.Reload(uiState))
                     }
                 }
                 TimelineSection(uiState.timelines)

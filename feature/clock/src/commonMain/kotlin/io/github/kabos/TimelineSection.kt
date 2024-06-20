@@ -22,17 +22,36 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-val previewTimelines = listOf(
-    TimelineItem(departureTime = "10:00", remainingTime = "5 min later"),
-    TimelineItem(departureTime = "11:00", remainingTime = "10 min later"),
-    TimelineItem(departureTime = "12:00", remainingTime = "15 min later"),
-)
+import kotlinx.datetime.LocalTime
 
 data class TimelineItem(
-    val departureTime: String,
-    val remainingTime: String,
-)
+    val departureTime: LocalTime,
+    val departureTimeText: String,
+    val remainingTimeText: String,
+) {
+    companion object {
+        fun of(
+            now: LocalTime,
+            bus: LocalTime,
+        ): TimelineItem {
+            return TimelineItem(
+                departureTime = bus,
+                departureTimeText = "${bus.hour}:${bus.minute}",
+                remainingTimeText = getRemainingTimeText(start = now, end = bus)
+            )
+        }
+
+        private fun getRemainingTimeText(
+            start: LocalTime,
+            end: LocalTime,
+        ): String {
+            val remainingHour = end.hour - start.hour
+            val hourText = if (remainingHour > 0) end.hour else 0
+            val remainingMinute = end.minute - start.minute
+            return "$hourText:$remainingMinute later"
+        }
+    }
+}
 
 @Composable
 internal fun TimelineSection(
@@ -45,8 +64,8 @@ internal fun TimelineSection(
     ) {
         timelines.forEachIndexed { index, item ->
             TimelineItem(
-                name = item.departureTime,
-                description = item.remainingTime,
+                name = item.departureTimeText,
+                description = item.remainingTimeText,
                 isFirst = index == 0,
                 isLast = index == timelines.lastIndex
             )
@@ -149,3 +168,21 @@ private fun BusCard(
         }
     }
 }
+
+val previewTimelines = listOf(
+    TimelineItem(
+        departureTime = LocalTime(10, 0),
+        departureTimeText = "10:00",
+        remainingTimeText = "5 min later",
+    ),
+    TimelineItem(
+        departureTime = LocalTime(11, 0),
+        departureTimeText = "11:00",
+        remainingTimeText = "10 min later",
+    ),
+    TimelineItem(
+        departureTime = LocalTime(12, 0),
+        departureTimeText = "12:00",
+        remainingTimeText = "15 min later",
+    )
+)
