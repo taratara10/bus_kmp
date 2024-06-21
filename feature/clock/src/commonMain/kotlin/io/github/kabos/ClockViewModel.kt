@@ -1,6 +1,7 @@
 package io.github.kabos
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.github.kabos.ClockContract.SideEffect
 import io.github.kabos.ClockContract.UiAction
 import io.github.kabos.ClockContract.UiState
@@ -8,6 +9,7 @@ import io.github.kabos.ClockContract.UiState.Init
 import io.github.kabos.mvi.MVI
 import io.github.kabos.mvi.mviDelegate
 import io.github.kabos.repository.DefaultTimetableRepository
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
 import kotlinx.datetime.TimeZone
@@ -21,16 +23,24 @@ interface ClockContract {
             val timelines: List<TimelineItem>,
         ) : UiState
 
-        data object NoBus : UiState
+        data class NoBus(
+            val stationName: StationName,
+        ) : UiState
     }
 
     sealed interface UiAction {
         data object Initialize : UiAction
         data class Reload(val uiState: UiState.Timeline) : UiAction
+        data object ShowStationSelectDialog : UiAction
     }
 
     sealed interface SideEffect {
-        data object ShowStationSelectDialog : SideEffect
+        data class ShowStationSelectDialog(
+            val currentStation: StationName,
+            val stations: List<StationName>,
+            val updateStation: (StationName) -> Unit,
+        ) : SideEffect
+
         data object NavigateToTimetable : SideEffect
     }
 }
@@ -41,6 +51,8 @@ class ClockViewModel : ViewModel(),
     // todo DI
     private val useCase = GetBusDepartureTimeUseCase(DefaultTimetableRepository())
     private val stationNames = listOf(StationName.takinoi, StationName.tsudanuma)
+
+    private var selectedStation = stationNames.first()
 
     override fun onAction(uiAction: UiAction) {
         when (uiAction) {
@@ -53,14 +65,29 @@ class ClockViewModel : ViewModel(),
             UiAction.Initialize -> {
                 updateUiState(
                     initialize(
-                        stationName = stationNames.first(),
+                        stationName = selectedStation,
                         timetable = useCase.invoke(
-                            stationName = stationNames.first(),
+                            stationName = selectedStation,
                             dayType = DayType.of(Clock.System),
                         ),
                         now = now(),
                     )
                 )
+            }
+
+            UiAction.ShowStationSelectDialog -> {
+                viewModelScope.launch {
+                    emitSideEffect(
+                        SideEffect.ShowStationSelectDialog(
+                            currentStation = selectedStation,
+                            stations = stationNames,
+                            updateStation = {
+                                selectedStation = it
+                                onAction(UiAction.Initialize)
+                            },
+                        )
+                    )
+                }
             }
         }
     }
@@ -81,7 +108,7 @@ private fun initialize(
         .map { schedule -> TimelineItem.of(now = now, bus = schedule) }
 
     return if (timelines.isEmpty()) {
-        UiState.NoBus
+        UiState.NoBus(stationName = stationName)
     } else {
         UiState.Timeline(
             stationName = stationName,
