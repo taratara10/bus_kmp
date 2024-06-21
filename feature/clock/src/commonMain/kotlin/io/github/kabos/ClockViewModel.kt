@@ -66,7 +66,8 @@ class ClockViewModel : ViewModel(),
     }
 
     private fun now(): LocalTime {
-        return Clock.System.now().toLocalDateTime(TimeZone.of("Asia/Tokyo")).time
+        return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
+        // .subtract( LocalTime(12, 0) ).value
     }
 }
 

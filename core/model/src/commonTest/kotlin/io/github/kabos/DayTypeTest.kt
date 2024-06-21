@@ -1,6 +1,5 @@
 package io.github.kabos
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -32,8 +31,4 @@ class DayTypeTest {
             actual = DayType.of(testClock),
         )
     }
-}
-
-class FixedClock(private val instant: Instant) : Clock {
-    override fun now(): Instant = instant
 }

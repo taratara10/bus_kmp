@@ -22,6 +22,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.github.michaelbull.result.getOr
+import com.github.michaelbull.result.map
+import io.github.kabos.extension.subtract
 import kotlinx.datetime.LocalTime
 
 data class TimelineItem(
@@ -34,6 +37,7 @@ data class TimelineItem(
             now: LocalTime,
             bus: LocalTime,
         ): TimelineItem {
+            // todo testを書く
             return TimelineItem(
                 departureTime = bus,
                 departureTimeText = "${bus.hour}:${bus.minute}",
@@ -45,10 +49,11 @@ data class TimelineItem(
             start: LocalTime,
             end: LocalTime,
         ): String {
-            val remainingHour = end.hour - start.hour
-            val hourText = if (remainingHour > 0) end.hour else 0
-            val remainingMinute = end.minute - start.minute
-            return "$hourText:$remainingMinute later"
+            return end.subtract(start)
+                .map { remaining ->
+                    "${(remaining.hour * 60) + remaining.minute} minute later"
+                }
+                .getOr("")
         }
     }
 }

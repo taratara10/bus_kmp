@@ -13,7 +13,7 @@ enum class DayType {
 
     companion object {
         fun of(clock: Clock): DayType {
-            val dayOfWeek = clock.now().toLocalDateTime(TimeZone.of("Asia/Tokyo")).dayOfWeek
+            val dayOfWeek = clock.now().toLocalDateTime(TimeZone.currentSystemDefault()).dayOfWeek
             return when (dayOfWeek) {
                 SATURDAY -> Saturday
                 SUNDAY -> Holiday
