@@ -1,30 +1,20 @@
 package io.github.kabos
 
-import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TimelineSectionTest {
     @Test
-    fun a() {
-        assertEquals(2, 1)
-    }
-
-    @Test
     fun test() {
-        val departureTime = LocalTime(8, 0)
-        val testClock = FixedClock(Instant.parse("2024-06-01T09:30:00")).now()
-            .toLocalDateTime(TimeZone.UTC).time
+        val departure = LocalTime(8, 0)
         assertEquals(
             expected = TimelineItem(
-                departureTime = departureTime,
-                departureTimeText = "9:30",
+                departureTime = departure,
+                departureTimeText = "08:00",
                 remainingTimeText = "90 minute later"
             ),
-            actual = TimelineItem.of(now = testClock, bus = departureTime)
+            actual = TimelineItem.of(now = LocalTime(6, 30), bus = departure)
         )
     }
 }

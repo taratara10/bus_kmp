@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.map
 import io.github.kabos.extension.subtract
+import io.github.kabos.extension.toHHmm
 import kotlinx.datetime.LocalTime
 
 data class TimelineItem(
@@ -37,10 +38,9 @@ data class TimelineItem(
             now: LocalTime,
             bus: LocalTime,
         ): TimelineItem {
-            // todo testを書く
             return TimelineItem(
                 departureTime = bus,
-                departureTimeText = "${bus.hour}:${bus.minute}",
+                departureTimeText = bus.toHHmm(),
                 remainingTimeText = getRemainingTimeText(start = now, end = bus)
             )
         }
