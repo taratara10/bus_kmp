@@ -6,7 +6,7 @@ import kotlin.test.assertEquals
 
 class TimelineSectionTest {
     @Test
-    fun test() {
+    fun `returnOk_WhenTimeIsLater`() {
         val departure = LocalTime(8, 0)
         assertEquals(
             expected = TimelineItem(
@@ -15,6 +15,19 @@ class TimelineSectionTest {
                 remainingTimeText = "90 minute later"
             ),
             actual = TimelineItem.of(now = LocalTime(6, 30), bus = departure)
+        )
+    }
+
+    @Test
+    fun `returnErr_WhenTimeIsEarly`() {
+        val departure = LocalTime(8, 0)
+        assertEquals(
+            expected = TimelineItem(
+                departureTime = departure,
+                departureTimeText = "08:00",
+                remainingTimeText = ""
+            ),
+            actual = TimelineItem.of(now = LocalTime(9, 30), bus = departure)
         )
     }
 }
