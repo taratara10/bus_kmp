@@ -1,6 +1,5 @@
 package io.github.kabos
 
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -11,7 +10,7 @@ class DayTypeTest {
         val testClock = FixedClock(Instant.parse("2024-06-01T00:00:00+09:00"))
         assertEquals(
             expected = DayType.Saturday,
-            actual = testClock.toDayType(),
+            actual = DayType.of(testClock),
         )
     }
 
@@ -20,7 +19,7 @@ class DayTypeTest {
         val testClock = FixedClock(Instant.parse("2024-06-02T00:00:00+09:00"))
         assertEquals(
             expected = DayType.Holiday,
-            actual = testClock.toDayType(),
+            actual = DayType.of(testClock),
         )
     }
 
@@ -29,11 +28,7 @@ class DayTypeTest {
         val testClock = FixedClock(Instant.parse("2024-06-03T00:00:00+09:00"))
         assertEquals(
             expected = DayType.Weekday,
-            actual = testClock.toDayType(),
+            actual = DayType.of(testClock),
         )
     }
-}
-
-class FixedClock(private val instant: Instant) : Clock {
-    override fun now(): Instant = instant
 }
