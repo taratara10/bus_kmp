@@ -1,0 +1,46 @@
+name: Deploy
+# From now in android
+# https://github.com/android/nowinandroid
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: git config setting
+        run: |
+          git config --local user.email "githubaction@action.action"
+          git config --local user.name "deployAction"
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Checkout deploy branch
+        run: git branch deploy
+
+      - name: Build
+        run: ./gradlew :composeApp:wasmJsBrowserDistribution
+
+      - name: Commit dist
+        run: |
+          cp -r composeApp/build/dist/wasmJs/productionExecutable/* docs/
+          git commit -am "deploy"
+          git push -f origin deploy
