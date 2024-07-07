@@ -14,4 +14,8 @@ class DummyTimetableRepository : TimetableRepository {
     override fun getTimetable(stationName: StationName): Result<List<Timetable>, Exception> {
         return resultGetTimetable
     }
+
+    override fun getTimetableUrl(stationName: StationName): Result<String, Exception> {
+        return Ok("https://www.navitime.co.jp/diagram/bus/00043845/00012557/1/")
+    }
 }

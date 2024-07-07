@@ -6,4 +6,5 @@ import io.github.kabos.Timetable
 
 interface TimetableRepository {
     fun getTimetable(stationName: StationName): Result<List<Timetable>, Exception>
+    fun getTimetableUrl(stationName: StationName): Result<String, Exception>
 }

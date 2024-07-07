@@ -1,7 +1,11 @@
 package io.github.kabos
 
+import androidx.compose.ui.platform.UriHandler
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.github.michaelbull.result.andThen
+import com.github.michaelbull.result.onFailure
+import com.github.michaelbull.result.runCatching
 import io.github.kabos.ClockContract.SideEffect
 import io.github.kabos.ClockContract.UiAction
 import io.github.kabos.ClockContract.UiState
@@ -32,6 +36,7 @@ interface ClockContract {
         data object Initialize : UiAction
         data class Reload(val uiState: UiState.Timeline) : UiAction
         data object ShowStationSelectDialog : UiAction
+        data class OpenBrowser(val uriHandler: UriHandler, val stationName: StationName) : UiAction
     }
 
     sealed interface SideEffect {
@@ -41,7 +46,7 @@ interface ClockContract {
             val updateStation: (StationName) -> Unit,
         ) : SideEffect
 
-        data object NavigateToTimetable : SideEffect
+        data object ShowSorryUrlSnackBar : SideEffect
     }
 }
 
@@ -49,44 +54,50 @@ class ClockViewModel : ViewModel(),
     MVI<UiState, UiAction, SideEffect> by mviDelegate(initialUiState = Init) {
 
     // todo DI
-    private val useCase = GetBusDepartureTimeUseCase(DefaultTimetableRepository())
+    private val repository = DefaultTimetableRepository()
+    private val useCase = GetBusDepartureTimeUseCase(repository)
     private val stationNames = listOf(StationName.takinoi, StationName.tsudanuma)
 
     private var selectedStation = stationNames.first()
 
     override fun onAction(uiAction: UiAction) {
-        when (uiAction) {
-            is UiAction.Reload -> {
-                updateUiState {
-                    uiAction.uiState.updateTime(now = now())
+        viewModelScope.launch {
+            when (uiAction) {
+                is UiAction.Reload -> {
+                    updateUiState {
+                        uiAction.uiState.updateTime(now = now())
+                    }
                 }
-            }
 
-            UiAction.Initialize -> {
-                updateUiState(
-                    initialize(
+                UiAction.Initialize -> {
+                    getInitState(
                         stationName = selectedStation,
                         timetable = useCase.invoke(
                             stationName = selectedStation,
                             dayType = DayType.of(Clock.System),
                         ),
                         now = now(),
-                    )
-                )
-            }
+                    ).let { updateUiState(it) }
+                }
 
-            UiAction.ShowStationSelectDialog -> {
-                viewModelScope.launch {
-                    emitSideEffect(
-                        SideEffect.ShowStationSelectDialog(
-                            currentStation = selectedStation,
-                            stations = stationNames,
-                            updateStation = {
-                                selectedStation = it
-                                onAction(UiAction.Initialize)
-                            },
-                        )
-                    )
+                UiAction.ShowStationSelectDialog -> {
+                    SideEffect.ShowStationSelectDialog(
+                        currentStation = selectedStation,
+                        stations = stationNames,
+                        updateStation = {
+                            selectedStation = it
+                            onAction(UiAction.Initialize)
+                        },
+                    ).let { emitSideEffect(it) }
+                }
+
+                is UiAction.OpenBrowser -> {
+                    repository.getTimetableUrl(stationName = uiAction.stationName)
+                        .andThen { url ->
+                            runCatching { uiAction.uriHandler.openUri(url) }
+                        }.onFailure {
+                            emitSideEffect(SideEffect.ShowSorryUrlSnackBar)
+                        }
                 }
             }
         }
@@ -98,7 +109,7 @@ class ClockViewModel : ViewModel(),
     }
 }
 
-private fun initialize(
+private fun getInitState(
     stationName: StationName,
     timetable: List<LocalTime>,
     now: LocalTime,

@@ -16,6 +16,14 @@ class DefaultTimetableRepository : TimetableRepository {
             else -> Err(IllegalArgumentException("定義のない駅名です"))
         }
     }
+
+    override fun getTimetableUrl(stationName: StationName): Result<String, Exception> {
+        return when (stationName) {
+            StationName.takinoi -> return Ok("https://www.navitime.co.jp/diagram/bus/00139553/00032180/0/")
+            StationName.tsudanuma -> return Ok("https://www.navitime.co.jp/diagram/bus/00043845/00032180/1/")
+            else -> Err(IllegalArgumentException("定義のない駅です"))
+        }
+    }
 }
 
 private val takinoiTimetable = listOf(
