@@ -131,12 +131,14 @@ private fun DotLines(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.width(32.dp),
     ) {
+        val circleSize = 24.dp
         if (showTopLine) {
             Line(height = lineHeight)
+            Donuts(size = circleSize)
         } else {
             Spacer(modifier = Modifier.height(lineHeight))
+            Circle(size = circleSize)
         }
-        CirclePoint(size = 24.dp)
         if (showBottomLine) {
             Line(height = lineHeight)
         } else {
@@ -146,7 +148,20 @@ private fun DotLines(
 }
 
 @Composable
-private fun CirclePoint(
+private fun Circle(
+    size: Dp,
+    color: Color = Color.Blue,
+) {
+    Canvas(modifier = Modifier.size(size)) {
+        drawCircle(
+            color = color,
+            center = center,
+        )
+    }
+}
+
+@Composable
+private fun Donuts(
     size: Dp,
     color: Color = Color.Blue,
 ) {
@@ -192,7 +207,12 @@ private fun FeaturedBusCard(
                 .padding(end = 24.dp)
         ) {
             Text(text = departureTime, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text(text = remainingTime, fontSize = 24.sp, color = Color.Red)
+            Text(
+                text = remainingTime,
+                fontSize = 28.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.Red
+            )
         }
     }
 }
