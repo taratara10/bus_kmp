@@ -1,5 +1,6 @@
 package io.github.kabos
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +27,7 @@ import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.map
 import io.github.kabos.extension.subtract
 import io.github.kabos.extension.toHHmm
+import io.github.kabos.extension.tommss
 import kotlinx.datetime.LocalTime
 
 data class TimelineItem(
@@ -36,13 +38,27 @@ data class TimelineItem(
     companion object {
         fun of(
             now: LocalTime,
-            bus: LocalTime,
+            departure: LocalTime,
+            index: Int,
         ): TimelineItem {
             return TimelineItem(
-                departureTime = bus,
-                departureTimeText = bus.toHHmm(),
-                remainingTimeText = getRemainingTimeText(start = now, end = bus)
+                departureTime = departure,
+                departureTimeText = departure.toHHmm(),
+                remainingTimeText = if (index == 0) {
+                    getCountdownText(start = now, end = departure)
+                } else {
+                    getRemainingTimeText(start = now, end = departure)
+                }
             )
+        }
+
+        private fun getCountdownText(
+            start: LocalTime,
+            end: LocalTime,
+        ): String {
+            return end.subtract(start)
+                .map { remaining -> remaining.tommss() }
+                .getOr("")
         }
 
         private fun getRemainingTimeText(
@@ -50,9 +66,7 @@ data class TimelineItem(
             end: LocalTime,
         ): String {
             return end.subtract(start)
-                .map { remaining ->
-                    "${(remaining.hour * 60) + remaining.minute} minute later"
-                }
+                .map { remaining -> "${(remaining.hour * 60) + remaining.minute} minute later" }
                 .getOr("")
         }
     }
@@ -92,10 +106,17 @@ private fun TimelineItem(
     ) {
         DotLines(showTopLine = !isFirst, showBottomLine = !isLast)
         Spacer(modifier = Modifier.width(8.dp))
-        BusCard(
-            departureTime = name,
-            remainingTime = description,
-        )
+        if (isFirst) {
+            FeaturedBusCard(
+                departureTime = name,
+                remainingTime = description,
+            )
+        } else {
+            BusCard(
+                departureTime = name,
+                remainingTime = description,
+            )
+        }
     }
 }
 
@@ -154,6 +175,26 @@ private fun Line(
             .height(height)
             .background(color)
     )
+}
+
+@Composable
+private fun FeaturedBusCard(
+    departureTime: String,
+    remainingTime: String,
+) {
+    Card(
+        border = BorderStroke(1.dp, Color.Red),
+    ) {
+        Column(
+            modifier = Modifier
+                .background(Color.Gray.copy(alpha = 0.1f))
+                .padding(8.dp)
+                .padding(end = 24.dp)
+        ) {
+            Text(text = departureTime, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(text = remainingTime, fontSize = 24.sp, color = Color.Red)
+        }
+    }
 }
 
 @Composable
