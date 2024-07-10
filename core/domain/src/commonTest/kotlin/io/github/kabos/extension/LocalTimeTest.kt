@@ -14,6 +14,8 @@ class LocalTimeTest {
         val base = LocalTime(hour = 6, minute = 30)
         val test1 = LocalTime(hour = 5, minute = 0)
         val test2 = LocalTime(hour = 5, minute = 40)
+        val test3 = LocalTime(hour = 6, minute = 10, second = 20)
+
         assertEquals(
             expected = LocalTime(hour = 1, minute = 30),
             actual = base.subtract(test1).value
@@ -21,6 +23,10 @@ class LocalTimeTest {
         assertEquals(
             expected = LocalTime(hour = 0, minute = 50),
             actual = base.subtract(test2).value
+        )
+        assertEquals(
+            expected = LocalTime(hour = 0, minute = 19, second = 40),
+            actual = base.subtract(test3).value
         )
     }
 

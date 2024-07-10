@@ -15,10 +15,7 @@ fun LocalTime.subtract(before: LocalTime): Result<LocalTime, Throwable> {
     return runCatching {
         val diff = this.toSecondOfDay() - before.toSecondOfDay()
         if (diff < 0) Err(IllegalArgumentException("before must be earlier than this"))
-        LocalTime(
-            hour = diff / (60 * 60),
-            minute = (diff / 60) % 60,
-        )
+        LocalTime.fromSecondOfDay(diff)
     }
 }
 
