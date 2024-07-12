@@ -170,12 +170,12 @@ private fun Title(
                             )
                         }
                     ) {
-                        Text("open timetable")
+                        Text("timetable")
                     }
                     Button(
                         onClick = { onAction(UiAction.ShowStationSelectDialog) }
                     ) {
-                        Text("station select")
+                        Text("station")
                     }
                 }
             }

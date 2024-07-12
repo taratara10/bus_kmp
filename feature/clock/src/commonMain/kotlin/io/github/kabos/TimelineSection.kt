@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Card
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -80,6 +84,7 @@ internal fun TimelineSection(
         modifier = Modifier
             .padding(16.dp)
             .background(Color.White)
+            .verticalScroll(rememberScrollState())
     ) {
         timelines.forEachIndexed { index, item ->
             TimelineItem(
@@ -137,7 +142,7 @@ private fun DotLines(
             Donuts(size = circleSize)
         } else {
             Spacer(modifier = Modifier.height(lineHeight))
-            Circle(size = circleSize)
+            Circle(size = circleSize * 1.5f)
         }
         if (showBottomLine) {
             Line(height = lineHeight)
@@ -150,7 +155,7 @@ private fun DotLines(
 @Composable
 private fun Circle(
     size: Dp,
-    color: Color = Color.Blue,
+    color: Color = MaterialTheme.colors.secondary,
 ) {
     Canvas(modifier = Modifier.size(size)) {
         drawCircle(
@@ -163,7 +168,7 @@ private fun Circle(
 @Composable
 private fun Donuts(
     size: Dp,
-    color: Color = Color.Blue,
+    color: Color = MaterialTheme.colors.secondary,
 ) {
     Canvas(modifier = Modifier.size(size)) {
         drawCircle(
@@ -182,7 +187,7 @@ private fun Donuts(
 @Composable
 private fun Line(
     height: Dp,
-    color: Color = Color.Blue,
+    color: Color = MaterialTheme.colors.secondary,
 ) {
     Spacer(
         modifier = Modifier
@@ -192,27 +197,38 @@ private fun Line(
     )
 }
 
+val CardWidth = 150.dp
+val CardBackground = Color.Gray.copy(alpha = 0.1f)
+
 @Composable
 private fun FeaturedBusCard(
     departureTime: String,
     remainingTime: String,
 ) {
     Card(
-        border = BorderStroke(1.dp, Color.Red),
+        border = BorderStroke(3.dp, MaterialTheme.colors.primarySurface),
     ) {
         Column(
             modifier = Modifier
-                .background(Color.Gray.copy(alpha = 0.1f))
-                .padding(8.dp)
-                .padding(end = 24.dp)
+                .background(CardBackground)
+                .padding(vertical = 12.dp, horizontal = 8.dp)
+                .width(CardWidth)
         ) {
             Text(text = departureTime, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text(
-                text = remainingTime,
-                fontSize = 28.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.Red
-            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Row(verticalAlignment = Alignment.Bottom) {
+                Text(
+                    text = remainingTime,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colors.primary,
+                )
+                Text(
+                    text = "  later",
+                    fontSize = 14.sp,
+                    color = Color.Gray,
+                )
+            }
         }
     }
 }
@@ -225,9 +241,9 @@ private fun BusCard(
     Card {
         Column(
             modifier = Modifier
-                .background(Color.Gray.copy(alpha = 0.1f))
+                .background(CardBackground)
                 .padding(8.dp)
-                .padding(end = 24.dp)
+                .width(CardWidth)
         ) {
             Text(text = departureTime, fontSize = 20.sp, fontWeight = FontWeight.Bold)
             Text(text = remainingTime, fontSize = 14.sp, color = Color.Gray)

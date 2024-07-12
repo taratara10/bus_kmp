@@ -10,7 +10,7 @@ import androidx.compose.ui.graphics.Color
 val BusColorPrimary = Color(0xFFE95098)
 val BusColorOnPrimary = Color(0xFFFFFFFF)
 val BusColorPrimaryContainer = Color(0xFFFFE0E8)
-val BusColorSecondary = Color(0xFF6E5773)
+val BusColorSecondary = Color(0xFF9A5C99)
 val BusColorOnSecondary = Color(0xFFFFFFFF)
 val BusColorError = Color(0xFFB3261E)
 val BusColorOnError = Color(0xFFFFFFFF)
@@ -37,7 +37,8 @@ fun BusTheme(content: @Composable () -> Unit) {
             secondaryVariant = BusColorPrimaryContainer,
             isLight = true,
         ),
-        typography = typography, shapes = shapes, content = content
-
+        typography = typography,
+        shapes = shapes,
+        content = content,
     )
 }
