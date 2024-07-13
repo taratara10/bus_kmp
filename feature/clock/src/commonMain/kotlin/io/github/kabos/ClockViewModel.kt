@@ -34,7 +34,7 @@ interface ClockContract {
 
     sealed interface UiAction {
         data object Initialize : UiAction
-        data class Reload(val uiState: UiState.Timeline) : UiAction
+        data object Reload : UiAction
         data object ShowStationSelectDialog : UiAction
         data class OpenBrowser(val uriHandler: UriHandler, val stationName: StationName) : UiAction
     }
@@ -63,14 +63,8 @@ class ClockViewModel : ViewModel(),
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {
             when (uiAction) {
-                is UiAction.Reload -> {
-                    updateUiState {
-                        uiAction.uiState.updateTime(now = now())
-                    }
-                }
-
                 UiAction.Initialize -> {
-                    getInitState(
+                    getTimeLine(
                         stationName = selectedStation,
                         timetable = useCase.invoke(
                             stationName = selectedStation,
@@ -78,6 +72,24 @@ class ClockViewModel : ViewModel(),
                         ),
                         now = now(),
                     ).let { updateUiState(it) }
+                }
+
+                is UiAction.Reload -> {
+                    updateUiState {
+                        when (this) {
+                            is UiState.Timeline -> {
+                                getTimeLine(
+                                    stationName = this.stationName,
+                                    timetable = this.timelines.map { it.departureTime },
+                                    now = now(),
+                                )
+                            }
+
+                            Init,
+                            is UiState.NoBus,
+                            -> this
+                        }
+                    }
                 }
 
                 UiAction.ShowStationSelectDialog -> {
@@ -102,24 +114,25 @@ class ClockViewModel : ViewModel(),
             }
         }
     }
-
-    private fun now(): LocalTime {
-        return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
-        // .subtract( LocalTime(12, 0) ).value
-    }
 }
 
-private fun getInitState(
+private fun now(): LocalTime {
+    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
+    // .subtract( LocalTime(12, 0) ).value
+}
+
+private fun getTimeLine(
     stationName: StationName,
     timetable: List<LocalTime>,
     now: LocalTime,
 ): UiState {
     val timelines = timetable
-        .filter { schedule -> schedule > now } // get available bus
-        .mapIndexed { index, schedule ->
+        .filter { departure -> departure > now } // get available bus
+        .take(5) // get latest 5 bus for display
+        .mapIndexed { index, departure -> // convert to TimelineItem
             TimelineItem.of(
                 now = now,
-                departure = schedule,
+                departure = departure,
                 index = index,
             )
         }
@@ -132,18 +145,4 @@ private fun getInitState(
             timelines = timelines,
         )
     }
-}
-
-private fun UiState.Timeline.updateTime(now: LocalTime): UiState.Timeline {
-    return this.copy(
-        timelines = this.timelines
-            .filter { timeline -> timeline.departureTime > now } // get available bus
-            .mapIndexed { index, timeline ->
-                TimelineItem.of(
-                    now = now,
-                    departure = timeline.departureTime,
-                    index = index,
-                )
-            }
-    )
 }

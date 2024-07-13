@@ -41,7 +41,7 @@ fun ClockScreen(
     var showDialog: SideEffect.ShowStationSelectDialog? by remember {
         mutableStateOf(null)
     }
-    var showSnackBar: MutableState<Boolean> = remember {
+    val showSnackBar: MutableState<Boolean> = remember {
         mutableStateOf(false)
     }
 
@@ -100,7 +100,7 @@ private fun ClockScreen(
                 LaunchedEffect(uiState) {
                     launch {
                         delay(1000)
-                        onAction(UiAction.Reload(uiState))
+                        onAction(UiAction.Reload)
                     }
                 }
                 ClockScaffold(
