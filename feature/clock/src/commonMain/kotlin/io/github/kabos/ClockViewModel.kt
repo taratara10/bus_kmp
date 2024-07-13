@@ -116,7 +116,13 @@ private fun getInitState(
 ): UiState {
     val timelines = timetable
         .filter { schedule -> schedule > now } // get available bus
-        .map { schedule -> TimelineItem.of(now = now, bus = schedule) }
+        .mapIndexed { index, schedule ->
+            TimelineItem.of(
+                now = now,
+                departure = schedule,
+                index = index,
+            )
+        }
 
     return if (timelines.isEmpty()) {
         UiState.NoBus(stationName = stationName)
@@ -132,6 +138,12 @@ private fun UiState.Timeline.updateTime(now: LocalTime): UiState.Timeline {
     return this.copy(
         timelines = this.timelines
             .filter { timeline -> timeline.departureTime > now } // get available bus
-            .map { timeline -> TimelineItem.of(now = now, bus = timeline.departureTime) }
+            .mapIndexed { index, timeline ->
+                TimelineItem.of(
+                    now = now,
+                    departure = timeline.departureTime,
+                    index = index,
+                )
+            }
     )
 }
