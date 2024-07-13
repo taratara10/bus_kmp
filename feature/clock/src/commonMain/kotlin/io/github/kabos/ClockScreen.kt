@@ -2,10 +2,15 @@ package io.github.kabos
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Snackbar
@@ -41,7 +46,7 @@ fun ClockScreen(
     var showDialog: SideEffect.ShowStationSelectDialog? by remember {
         mutableStateOf(null)
     }
-    var showSnackBar: MutableState<Boolean> = remember {
+    val showSnackBar: MutableState<Boolean> = remember {
         mutableStateOf(false)
     }
 
@@ -100,7 +105,7 @@ private fun ClockScreen(
                 LaunchedEffect(uiState) {
                     launch {
                         delay(1000)
-                        onAction(UiAction.Reload(uiState))
+                        onAction(UiAction.Reload)
                     }
                 }
                 ClockScaffold(
@@ -141,7 +146,19 @@ private fun ClockScaffold(
                 onAction = onAction,
             )
         },
-        content = { content() },
+        content = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.width(IntrinsicSize.Max)
+            ) {
+                content()
+                Spacer(modifier = Modifier.height(16.dp))
+                TimetableButton(
+                    stationName = stationName,
+                    onAction = onAction,
+                )
+            }
+        },
     )
 }
 
@@ -150,7 +167,6 @@ private fun Title(
     stationName: StationName,
     onAction: (UiAction) -> Unit,
 ) {
-    val handler = LocalUriHandler.current
     TopAppBar(
         title = {
             Row(
@@ -161,18 +177,6 @@ private fun Title(
                 Text(text = stationName.name, fontSize = 24.sp)
                 Row {
                     Button(
-                        onClick = {
-                            onAction(
-                                UiAction.OpenBrowser(
-                                    uriHandler = handler,
-                                    stationName = stationName
-                                )
-                            )
-                        }
-                    ) {
-                        Text("timetable")
-                    }
-                    Button(
                         onClick = { onAction(UiAction.ShowStationSelectDialog) }
                     ) {
                         Text("station")
@@ -181,4 +185,26 @@ private fun Title(
             }
         }
     )
+}
+
+@Composable
+fun TimetableButton(
+    stationName: StationName,
+    onAction: (UiAction) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val handler = LocalUriHandler.current
+    Button(
+        onClick = {
+            onAction(
+                UiAction.OpenBrowser(
+                    uriHandler = handler,
+                    stationName = stationName
+                )
+            )
+        },
+        modifier = modifier,
+    ) {
+        Text("timetable")
+    }
 }
