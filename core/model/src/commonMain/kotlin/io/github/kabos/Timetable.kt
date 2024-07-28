@@ -1,5 +1,7 @@
 package io.github.kabos
 
+import kotlinx.datetime.LocalTime
+
 data class WeekTimetable(
     val busRouteName: BusRouteName,
     val weekday: List<TimetableRow>,
@@ -18,5 +20,10 @@ data class WeekTimetable(
 data class TimetableRow(
     val hour: Int,
     val minutes: List<Int>,
+)
+
+data class TimetableCell(
+    val busRouteName: BusRouteName,
+    val localTime: LocalTime,
 )
 

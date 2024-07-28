@@ -1,10 +1,7 @@
 package io.github.kabos
 
-import com.github.michaelbull.result.Err
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
-import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.getOr
+import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
 import io.github.kabos.repository.TimetableRepository
 import kotlinx.datetime.LocalTime
@@ -13,26 +10,19 @@ class GetBusDepartureTimeUseCase(private val timetableRepository: TimetableRepos
     operator fun invoke(
         stationName: StationName,
         dayType: DayType,
-    ): List<LocalTime> {
-        return timetableRepository.getTimetable(stationName)
-            .andThen { timetables -> timetables.findTimetableByDayType(dayType) }
-            .andThen { timetable -> Ok(timetable.rows.convertToLocalTime()) }
+    ): List<TimetableCell> {
+        return timetableRepository.getTimetableForEachRoute(stationName)
+            .map { routes: List<WeekTimetable> -> routes.flatMap { it.toTimetableCell(dayType) } }
+            .map { cells: List<TimetableCell> -> cells.sortedBy { it.localTime } }
             .getOr(emptyList())
     }
 }
 
-private fun List<Timetable>.findTimetableByDayType(
-    dayType: DayType,
-): Result<Timetable, IllegalArgumentException> {
-    return this.find { it.dayType == dayType }?.let { Ok(it) }
-        ?: Err(IllegalArgumentException("Timetable not found"))
-}
-
-fun List<TimetableRow>.convertToLocalTime(): List<LocalTime> {
+private fun List<TimetableRow>.convertToLocalTime(): List<LocalTime> {
     return this.map { row ->
         row.minutes.map { minute ->
-            // Throw IllegalArgumentException if any parameter is out of range
             runCatching {
+                // Throw IllegalArgumentException if any parameter is out of range
                 LocalTime(hour = row.hour, minute = minute)
             }
         }
@@ -40,3 +30,11 @@ fun List<TimetableRow>.convertToLocalTime(): List<LocalTime> {
         .flatten() // List<Result<LocalTime, IllegalArgumentException>>
         .mapNotNull { it.getOr(null) } // List<LocalTime>
 }
+
+private fun WeekTimetable.toTimetableCell(dayType: DayType): List<TimetableCell> {
+    return this.getDayTimetable(dayType)
+        .convertToLocalTime()
+        .map { TimetableCell(busRouteName = this.busRouteName, localTime = it) }
+
+}
+
