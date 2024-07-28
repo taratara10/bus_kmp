@@ -3,15 +3,15 @@ package io.github.kabos.repository
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import io.github.kabos.StationName
-import io.github.kabos.Timetable
+import io.github.kabos.WeekTimetable
 
 /**
  * Debug Repository
  */
 class DummyTimetableRepository : TimetableRepository {
-    var resultGetTimetable: Result<List<Timetable>, Exception> = Ok(emptyList())
+    var resultGetTimetable: Result<List<WeekTimetable>, Exception> = Ok(emptyList())
 
-    override fun getTimetable(stationName: StationName): Result<List<Timetable>, Exception> {
+    override fun getTimetableForEachRoute(stationName: StationName): Result<List<WeekTimetable>, Exception> {
         return resultGetTimetable
     }
 
