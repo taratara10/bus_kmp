@@ -7,6 +7,7 @@ data class Timetable(
 )
 
 data class TimetableRow(
+    val timetableName: TimetableName = TimetableName(""),
     val hour: Int,
     val minutes: List<Int>,
 )
