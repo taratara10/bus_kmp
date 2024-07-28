@@ -5,10 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.Button
@@ -26,7 +24,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -112,7 +109,10 @@ private fun ClockScreen(
                     stationName = uiState.stationName,
                     onAction = onAction,
                 ) {
-                    TimelineSection(uiState.timelines)
+                    TimelineSection(
+                        timelines = uiState.timelines,
+                        onAction = onAction,
+                    )
                 }
             }
         }
@@ -152,11 +152,6 @@ private fun ClockScaffold(
                 modifier = Modifier.width(IntrinsicSize.Max)
             ) {
                 content()
-                Spacer(modifier = Modifier.height(16.dp))
-                TimetableButton(
-                    stationName = stationName,
-                    onAction = onAction,
-                )
             }
         },
     )
@@ -185,26 +180,4 @@ private fun Title(
             }
         }
     )
-}
-
-@Composable
-fun TimetableButton(
-    stationName: StationName,
-    onAction: (UiAction) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    val handler = LocalUriHandler.current
-    Button(
-        onClick = {
-            onAction(
-                UiAction.OpenBrowser(
-                    uriHandler = handler,
-                    stationName = stationName
-                )
-            )
-        },
-        modifier = modifier,
-    ) {
-        Text("timetable")
-    }
 }

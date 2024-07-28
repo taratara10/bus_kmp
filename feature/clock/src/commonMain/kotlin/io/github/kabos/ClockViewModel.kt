@@ -36,7 +36,10 @@ interface ClockContract {
         data object Initialize : UiAction
         data object Reload : UiAction
         data object ShowStationSelectDialog : UiAction
-        data class OpenBrowser(val uriHandler: UriHandler, val stationName: StationName) : UiAction
+        data class OpenBrowser(
+            val uriHandler: UriHandler,
+            val busRouteName: BusRouteName,
+        ) : UiAction
     }
 
     sealed interface SideEffect {
@@ -80,7 +83,7 @@ class ClockViewModel : ViewModel(),
                             is UiState.Timeline -> {
                                 getTimeLine(
                                     stationName = this.stationName,
-                                    timetable = this.timelines.map { it.departureTime },
+                                    timetable = this.timelines.map { it.timetableCell },
                                     now = now(),
                                 )
                             }
@@ -104,7 +107,7 @@ class ClockViewModel : ViewModel(),
                 }
 
                 is UiAction.OpenBrowser -> {
-                    repository.getTimetableUrl(stationName = uiAction.stationName)
+                    repository.getTimetableUrl(busRouteName = uiAction.busRouteName)
                         .andThen { url ->
                             runCatching { uiAction.uriHandler.openUri(url) }
                         }.onFailure {
@@ -118,21 +121,21 @@ class ClockViewModel : ViewModel(),
 
 private fun now(): LocalTime {
     return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
-    // .subtract( LocalTime(12, 0) ).value
+//        .subtract(LocalTime(12, 0)).value
 }
 
 private fun getTimeLine(
     stationName: StationName,
-    timetable: List<LocalTime>,
+    timetable: List<TimetableCell>,
     now: LocalTime,
 ): UiState {
     val timelines = timetable
-        .filter { departure -> departure > now } // get available bus
+        .filter { timetable -> timetable.localTime > now } // get available bus
         .take(5) // get latest 5 bus for display
-        .mapIndexed { index, departure -> // convert to TimelineItem
+        .mapIndexed { index, timetable -> // convert to TimelineItem
             TimelineItem.of(
                 now = now,
-                departure = departure,
+                timetableCell = timetable,
                 index = index,
             )
         }

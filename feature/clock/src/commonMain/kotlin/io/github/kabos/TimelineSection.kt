@@ -3,6 +3,7 @@ package io.github.kabos
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,30 +24,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.map
+import io.github.kabos.ClockContract.UiAction
 import io.github.kabos.extension.subtract
 import io.github.kabos.extension.toHHmm
 import io.github.kabos.extension.tommss
 import kotlinx.datetime.LocalTime
 
 data class TimelineItem(
-    val departureTime: LocalTime,
+    val timetableCell: TimetableCell,
     val departureTimeText: String,
     val remainingTimeText: String,
 ) {
     companion object {
         fun of(
             now: LocalTime,
-            departure: LocalTime,
+            timetableCell: TimetableCell,
             index: Int,
         ): TimelineItem {
+            val departure = timetableCell.localTime
             return TimelineItem(
-                departureTime = departure,
+                timetableCell = timetableCell,
                 departureTimeText = departure.toHHmm(),
                 remainingTimeText = if (index == 0) {
                     getCountdownText(start = now, end = departure)
@@ -79,7 +83,9 @@ data class TimelineItem(
 @Composable
 internal fun TimelineSection(
     timelines: List<TimelineItem>,
+    onAction: (UiAction) -> Unit,
 ) {
+    val handler = LocalUriHandler.current
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -88,10 +94,15 @@ internal fun TimelineSection(
     ) {
         timelines.forEachIndexed { index, item ->
             TimelineItem(
-                name = item.departureTimeText,
-                description = item.remainingTimeText,
+                timetableItem = item,
                 isFirst = index == 0,
-                isLast = index == timelines.lastIndex
+                isLast = index == timelines.lastIndex,
+                onClick = {
+                    UiAction.OpenBrowser(
+                        uriHandler = handler,
+                        busRouteName = item.timetableCell.busRouteName,
+                    ).let(onAction)
+                }
             )
         }
     }
@@ -99,10 +110,10 @@ internal fun TimelineSection(
 
 @Composable
 private fun TimelineItem(
-    name: String,
-    description: String,
+    timetableItem: TimelineItem,
     isFirst: Boolean,
     isLast: Boolean,
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -113,13 +124,13 @@ private fun TimelineItem(
         Spacer(modifier = Modifier.width(8.dp))
         if (isFirst) {
             FeaturedBusCard(
-                departureTime = name,
-                remainingTime = description,
+                timetableItem = timetableItem,
+                onClick = onClick,
             )
         } else {
             BusCard(
-                departureTime = name,
-                remainingTime = description,
+                timetableItem = timetableItem,
+                onClick = onClick,
             )
         }
     }
@@ -202,11 +213,12 @@ val CardBackground = Color.Gray.copy(alpha = 0.1f)
 
 @Composable
 private fun FeaturedBusCard(
-    departureTime: String,
-    remainingTime: String,
+    timetableItem: TimelineItem,
+    onClick: () -> Unit,
 ) {
     Card(
         border = BorderStroke(3.dp, MaterialTheme.colors.primarySurface),
+        modifier = Modifier.clickable { onClick() }
     ) {
         Column(
             modifier = Modifier
@@ -214,11 +226,15 @@ private fun FeaturedBusCard(
                 .padding(vertical = 12.dp, horizontal = 8.dp)
                 .width(CardWidth)
         ) {
-            Text(text = departureTime, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+            Text(
+                text = timetableItem.departureTimeText,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Row(verticalAlignment = Alignment.Bottom) {
                 Text(
-                    text = remainingTime,
+                    text = timetableItem.remainingTimeText,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colors.primary,
@@ -229,14 +245,19 @@ private fun FeaturedBusCard(
                     color = Color.Gray,
                 )
             }
+            Text(
+                text = timetableItem.timetableCell.busRouteName.name,
+                fontSize = 14.sp,
+                color = Color.Gray,
+            )
         }
     }
 }
 
 @Composable
 private fun BusCard(
-    departureTime: String,
-    remainingTime: String,
+    timetableItem: TimelineItem,
+    onClick: () -> Unit,
 ) {
     Card {
         Column(
@@ -244,27 +265,19 @@ private fun BusCard(
                 .background(CardBackground)
                 .padding(8.dp)
                 .width(CardWidth)
+                .clickable { onClick() }
         ) {
-            Text(text = departureTime, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-            Text(text = remainingTime, fontSize = 14.sp, color = Color.Gray)
+            Text(
+                text = timetableItem.departureTimeText,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+            Text(text = timetableItem.remainingTimeText, fontSize = 14.sp, color = Color.Gray)
+            Text(
+                text = timetableItem.timetableCell.busRouteName.name,
+                fontSize = 14.sp,
+                color = Color.Gray
+            )
         }
     }
 }
-
-val previewTimelines = listOf(
-    TimelineItem(
-        departureTime = LocalTime(10, 0),
-        departureTimeText = "10:00",
-        remainingTimeText = "5 min later",
-    ),
-    TimelineItem(
-        departureTime = LocalTime(11, 0),
-        departureTimeText = "11:00",
-        remainingTimeText = "10 min later",
-    ),
-    TimelineItem(
-        departureTime = LocalTime(12, 0),
-        departureTimeText = "12:00",
-        remainingTimeText = "15 min later",
-    )
-)
