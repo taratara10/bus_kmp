@@ -46,7 +46,6 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
-            implementation(projects.shared)
             implementation(projects.core.domain)
             implementation(projects.core.model)
             implementation(libs.kotlinx.datetime)
