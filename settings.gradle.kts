@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 }
 
 include(
-    ":composeApp",
+    ":app",
     ":core:domain",
     ":core:model",
     ":feature:clock",
