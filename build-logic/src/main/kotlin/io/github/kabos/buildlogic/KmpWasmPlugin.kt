@@ -6,7 +6,6 @@ import org.jetbrains.kotlin.gradle.targets.js.dsl.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 @OptIn(ExperimentalWasmDsl::class)
-@Suppress("unused")
 class KmpWasmPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {

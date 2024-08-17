@@ -12,4 +12,3 @@ class KmpPlugin : Plugin<Project> {
         }
     }
 }
-
