@@ -30,7 +30,7 @@ dependencyResolutionManagement {
 }
 
 include(
-    ":app",
+    ":app-wasm",
     ":core:domain",
     ":core:model",
     ":feature:clock",
