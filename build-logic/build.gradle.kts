@@ -13,10 +13,6 @@ dependencies {
 
 gradlePlugin {
     plugins {
-        register("test") {
-            id = "test.hello"
-            implementationClass = "io.github.kabos.buildlogic.HelloPlugin"
-        }
         register("android") {
             id = "buildlogic.android"
             implementationClass = "io.github.kabos.buildlogic.AndroidPlugin"
