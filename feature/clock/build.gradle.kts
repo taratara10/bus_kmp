@@ -8,8 +8,10 @@ plugins {
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidGradleLibraryPlugin)
+    id("buildlogic.android")
 }
 
+android.namespace = "io.github.kabos.feature.clock"
 
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
@@ -63,17 +65,5 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.junit)
         }
-    }
-}
-
-android {
-    namespace = "io.github.kabos.feature.clock"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }
