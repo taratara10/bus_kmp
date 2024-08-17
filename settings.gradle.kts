@@ -2,6 +2,7 @@ rootProject.name = "SinKeiseiBus"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
+    includeBuild("build-logic")
     repositories {
         google {
             mavenContent {
@@ -28,8 +29,9 @@ dependencyResolutionManagement {
     }
 }
 
-include(":composeApp")
-include(":core:domain")
-include(":core:model")
-include(":feature:clock")
-include(":build-logic")
+include(
+    ":composeApp",
+    ":core:domain",
+    ":core:model",
+    ":feature:clock",
+)
