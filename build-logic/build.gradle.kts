@@ -13,9 +13,13 @@ dependencies {
 
 gradlePlugin {
     plugins {
+        register("kmp") {
+            id = "buildlogic.kmp"
+            implementationClass = "io.github.kabos.buildlogic.KmpPlugin"
+        }
         register("android") {
-            id = "buildlogic.android"
-            implementationClass = "io.github.kabos.buildlogic.AndroidPlugin"
+            id = "buildlogic.kmp.android"
+            implementationClass = "io.github.kabos.buildlogic.KmpAndroidPlugin"
         }
     }
 }

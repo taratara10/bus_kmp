@@ -1,14 +1,13 @@
 package io.github.kabos.buildlogic
 
-import com.android.build.gradle.LibraryExtension
-import com.android.build.gradle.TestedExtension
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.kotlin.dsl.configure
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 @Suppress("unused")
-class AndroidPlugin : Plugin<Project> {
+class KmpAndroidPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
             with(pluginManager) {
@@ -18,16 +17,17 @@ class AndroidPlugin : Plugin<Project> {
             androidLibrary {
                 setupAndroid()
             }
+
+            kotlin {
+                androidTarget {
+                    @OptIn(ExperimentalKotlinGradlePluginApi::class)
+                    compilerOptions {
+                        jvmTarget.set(JvmTarget.JVM_11)
+                    }
+                }
+            }
         }
     }
-}
-
-fun Project.androidLibrary(action: LibraryExtension.() -> Unit) {
-    extensions.configure(action)
-}
-
-fun Project.android(action: TestedExtension.() -> Unit) {
-    extensions.configure(action)
 }
 
 fun Project.setupAndroid() {
