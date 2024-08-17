@@ -37,12 +37,12 @@ jobs:
         run: git checkout -b deploy
 
       - name: Build
-        run: ./gradlew :composeApp:wasmJsBrowserDistribution
+        run: ./gradlew :app-wasm:wasmJsBrowserDistribution
 
       - name: Commit dist
         run: |
           mkdir -p docs/
-          cp -r composeApp/build/dist/wasmJs/productionExecutable/* docs/
+          cp -r app-wasm/build/dist/wasmJs/productionExecutable/* docs/
           git add docs/*
           git commit -m "deploy"
           git push -f origin deploy
