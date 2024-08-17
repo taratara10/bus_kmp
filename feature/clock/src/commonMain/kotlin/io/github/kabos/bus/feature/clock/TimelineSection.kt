@@ -1,4 +1,4 @@
-package io.github.kabos
+package io.github.kabos.bus.feature.clock
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
@@ -31,11 +31,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.map
-import io.github.kabos.ClockContract.UiAction
 import io.github.kabos.bus.core.domain.extension.subtract
 import io.github.kabos.bus.core.domain.extension.toHHmm
 import io.github.kabos.bus.core.domain.extension.tommss
 import io.github.kabos.bus.core.model.TimetableCell
+import io.github.kabos.bus.feature.clock.ClockContract.UiAction
 import kotlinx.datetime.LocalTime
 
 data class TimelineItem(

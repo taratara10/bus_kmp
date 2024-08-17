@@ -1,4 +1,4 @@
-package io.github.kabos
+package io.github.kabos.bus.feature.clock
 
 import androidx.compose.material.Colors
 import androidx.compose.material.MaterialTheme

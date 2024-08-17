@@ -1,4 +1,4 @@
-package io.github.kabos
+package io.github.kabos.bus.feature.clock
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,10 +27,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import io.github.kabos.ClockContract.SideEffect
-import io.github.kabos.ClockContract.UiAction
-import io.github.kabos.ClockContract.UiState
 import io.github.kabos.bus.core.model.StationName
+import io.github.kabos.bus.feature.clock.ClockContract.SideEffect
+import io.github.kabos.bus.feature.clock.ClockContract.UiAction
+import io.github.kabos.bus.feature.clock.ClockContract.UiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

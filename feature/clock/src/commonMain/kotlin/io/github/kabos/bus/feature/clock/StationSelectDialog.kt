@@ -1,4 +1,4 @@
-package io.github.kabos
+package io.github.kabos.bus.feature.clock
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

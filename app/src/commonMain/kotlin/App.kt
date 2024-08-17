@@ -1,6 +1,6 @@
 import androidx.compose.runtime.Composable
-import io.github.kabos.BusTheme
-import io.github.kabos.ClockScreen
+import io.github.kabos.bus.feature.clock.BusTheme
+import io.github.kabos.bus.feature.clock.ClockScreen
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable

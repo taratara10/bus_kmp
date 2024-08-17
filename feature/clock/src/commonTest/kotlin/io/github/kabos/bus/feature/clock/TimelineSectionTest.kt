@@ -1,4 +1,4 @@
-package io.github.kabos
+package io.github.kabos.bus.feature.clock
 
 import kotlinx.datetime.LocalTime
 import kotlin.test.Test
