@@ -21,5 +21,9 @@ gradlePlugin {
             id = "buildlogic.kmp.android"
             implementationClass = "io.github.kabos.buildlogic.KmpAndroidPlugin"
         }
+        register("wasm") {
+            id = "buildlogic.kmp.wasm"
+            implementationClass = "io.github.kabos.buildlogic.KmpWasmPlugin"
+        }
     }
 }
