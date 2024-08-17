@@ -5,8 +5,11 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.androidGradleLibraryPlugin)
+    id("buildlogic.android")
 }
+
+android.namespace = "io.github.kabos.core.domain"
 
 kotlin {
     @OptIn(ExperimentalWasmDsl::class)
@@ -52,17 +55,5 @@ kotlin {
             implementation(libs.kotlin.test)
             implementation(libs.junit)
         }
-    }
-}
-
-android {
-    namespace = "io.github.kabos.core.domain"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 }
