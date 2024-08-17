@@ -1,4 +1,4 @@
-package io.github.kabos.repository
+package io.github.kabos.bus.core.domain.repository
 
 import com.github.michaelbull.result.Result
 import io.github.kabos.bus.core.model.BusRouteName

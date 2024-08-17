@@ -1,4 +1,4 @@
-package io.github.kabos.mvi
+package io.github.kabos.bus.core.domain.mvi
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.channels.Channel

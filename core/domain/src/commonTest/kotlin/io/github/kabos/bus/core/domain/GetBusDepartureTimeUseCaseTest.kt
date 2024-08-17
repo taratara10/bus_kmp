@@ -1,14 +1,14 @@
-package io.github.kabos
+package io.github.kabos.bus.core.domain
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
+import io.github.kabos.bus.core.domain.repository.DummyTimetableRepository
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.DayType
 import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableCell
 import io.github.kabos.bus.core.model.TimetableRow
 import io.github.kabos.bus.core.model.WeekTimetable
-import io.github.kabos.repository.DummyTimetableRepository
 import kotlinx.datetime.LocalTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test

@@ -1,4 +1,4 @@
-package io.github.kabos.repository
+package io.github.kabos.bus.core.domain.repository
 
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result

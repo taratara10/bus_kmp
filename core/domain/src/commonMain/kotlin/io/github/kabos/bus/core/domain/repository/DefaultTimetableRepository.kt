@@ -1,19 +1,19 @@
-package io.github.kabos.repository
+package io.github.kabos.bus.core.domain.repository
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
+import io.github.kabos.bus.core.domain.data.takinoiTsu07
+import io.github.kabos.bus.core.domain.data.takinoiTsu08
+import io.github.kabos.bus.core.domain.data.tsudanumaTsu0506
+import io.github.kabos.bus.core.domain.data.tsudanumaTsu07
+import io.github.kabos.bus.core.domain.data.tsudanumaTsu08
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.Tsu0506
 import io.github.kabos.bus.core.model.Tsu07
 import io.github.kabos.bus.core.model.Tsu08
 import io.github.kabos.bus.core.model.WeekTimetable
-import io.github.kabos.data.takinoiTsu07
-import io.github.kabos.data.takinoiTsu08
-import io.github.kabos.data.tsudanumaTsu0506
-import io.github.kabos.data.tsudanumaTsu07
-import io.github.kabos.data.tsudanumaTsu08
 
 class DefaultTimetableRepository : TimetableRepository {
     override fun getTimetableForEachRoute(stationName: StationName): Result<List<WeekTimetable>, Exception> {

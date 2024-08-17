@@ -1,4 +1,4 @@
-package io.github.kabos.data
+package io.github.kabos.bus.core.domain.data
 
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.StationName

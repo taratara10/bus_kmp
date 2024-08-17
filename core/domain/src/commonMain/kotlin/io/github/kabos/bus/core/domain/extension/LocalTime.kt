@@ -1,4 +1,4 @@
-package io.github.kabos.extension
+package io.github.kabos.bus.core.domain.extension
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result

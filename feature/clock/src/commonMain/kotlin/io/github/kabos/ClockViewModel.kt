@@ -10,13 +10,14 @@ import io.github.kabos.ClockContract.SideEffect
 import io.github.kabos.ClockContract.UiAction
 import io.github.kabos.ClockContract.UiState
 import io.github.kabos.ClockContract.UiState.Init
+import io.github.kabos.bus.core.domain.GetBusDepartureTimeUseCase
+import io.github.kabos.bus.core.domain.mvi.MVI
+import io.github.kabos.bus.core.domain.mvi.mviDelegate
+import io.github.kabos.bus.core.domain.repository.DefaultTimetableRepository
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.DayType
 import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableCell
-import io.github.kabos.mvi.MVI
-import io.github.kabos.mvi.mviDelegate
-import io.github.kabos.repository.DefaultTimetableRepository
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime

@@ -1,4 +1,4 @@
-package io.github.kabos.extension
+package io.github.kabos.bus.core.domain.extension
 
 import kotlinx.datetime.LocalTime
 import kotlin.test.Test

@@ -32,10 +32,10 @@ import androidx.compose.ui.unit.sp
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.map
 import io.github.kabos.ClockContract.UiAction
+import io.github.kabos.bus.core.domain.extension.subtract
+import io.github.kabos.bus.core.domain.extension.toHHmm
+import io.github.kabos.bus.core.domain.extension.tommss
 import io.github.kabos.bus.core.model.TimetableCell
-import io.github.kabos.extension.subtract
-import io.github.kabos.extension.toHHmm
-import io.github.kabos.extension.tommss
 import kotlinx.datetime.LocalTime
 
 data class TimelineItem(
