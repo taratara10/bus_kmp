@@ -30,6 +30,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.github.kabos.ClockContract.SideEffect
 import io.github.kabos.ClockContract.UiAction
 import io.github.kabos.ClockContract.UiState
+import io.github.kabos.bus.core.model.StationName
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 

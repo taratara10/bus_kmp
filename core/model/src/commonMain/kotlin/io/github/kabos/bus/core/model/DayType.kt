@@ -1,4 +1,4 @@
-package io.github.kabos
+package io.github.kabos.bus.core.model
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.DayOfWeek.SATURDAY

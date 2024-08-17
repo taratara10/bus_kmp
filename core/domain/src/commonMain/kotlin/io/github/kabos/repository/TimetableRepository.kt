@@ -1,9 +1,9 @@
 package io.github.kabos.repository
 
 import com.github.michaelbull.result.Result
-import io.github.kabos.BusRouteName
-import io.github.kabos.StationName
-import io.github.kabos.WeekTimetable
+import io.github.kabos.bus.core.model.BusRouteName
+import io.github.kabos.bus.core.model.StationName
+import io.github.kabos.bus.core.model.WeekTimetable
 
 interface TimetableRepository {
     fun getTimetableForEachRoute(stationName: StationName): Result<List<WeekTimetable>, Exception>

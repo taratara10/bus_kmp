@@ -3,6 +3,11 @@ package io.github.kabos
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.map
 import com.github.michaelbull.result.runCatching
+import io.github.kabos.bus.core.model.DayType
+import io.github.kabos.bus.core.model.StationName
+import io.github.kabos.bus.core.model.TimetableCell
+import io.github.kabos.bus.core.model.TimetableRow
+import io.github.kabos.bus.core.model.WeekTimetable
 import io.github.kabos.repository.TimetableRepository
 import kotlinx.datetime.LocalTime
 

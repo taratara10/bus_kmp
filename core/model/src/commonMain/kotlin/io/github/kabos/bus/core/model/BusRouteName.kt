@@ -1,4 +1,4 @@
-package io.github.kabos
+package io.github.kabos.bus.core.model
 
 data class BusRouteName(
     val departureStationName: StationName,

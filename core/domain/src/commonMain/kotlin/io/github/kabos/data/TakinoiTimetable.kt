@@ -1,11 +1,11 @@
 package io.github.kabos.data
 
-import io.github.kabos.BusRouteName
-import io.github.kabos.StationName
-import io.github.kabos.TimetableRow
-import io.github.kabos.Tsu07
-import io.github.kabos.Tsu08
-import io.github.kabos.WeekTimetable
+import io.github.kabos.bus.core.model.BusRouteName
+import io.github.kabos.bus.core.model.StationName
+import io.github.kabos.bus.core.model.TimetableRow
+import io.github.kabos.bus.core.model.Tsu07
+import io.github.kabos.bus.core.model.Tsu08
+import io.github.kabos.bus.core.model.WeekTimetable
 
 // https://www.navitime.co.jp/diagram/bus/00139553/00032180/0/
 internal val takinoiTsu07: WeekTimetable = WeekTimetable(
