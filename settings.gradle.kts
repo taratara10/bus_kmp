@@ -29,9 +29,8 @@ dependencyResolutionManagement {
     }
 }
 
-include(
-    ":app-wasm",
-    ":core:domain",
-    ":core:model",
-    ":feature:clock",
-)
+include(":app-wearos")
+include(":app-wasm")
+include(":core:domain")
+include(":core:model")
+include(":feature:clock")
