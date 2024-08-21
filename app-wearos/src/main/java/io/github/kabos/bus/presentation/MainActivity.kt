@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.TimeText
 import io.github.kabos.bus.feature.clock.BusTheme
 import io.github.kabos.bus.feature.clock.ClockViewModel
 
@@ -38,7 +37,6 @@ fun WearApp(viewModel: ClockViewModel) {
                 .background(MaterialTheme.colors.background),
             contentAlignment = Alignment.Center
         ) {
-            TimeText()
             ClockScreen(viewModel = viewModel)
         }
     }

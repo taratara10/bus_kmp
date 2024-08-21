@@ -16,15 +16,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Card
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.PositionIndicator
+import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
+import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.material.Vignette
+import androidx.wear.compose.material.VignettePosition
 import androidx.wear.tooling.preview.devices.WearDevices
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.StationName
@@ -74,7 +77,7 @@ private fun ClockScreen(
                     onAction(UiAction.Reload)
                 }
             }
-            Timeline(
+            TimelineContent(
                 stationName = uiState.stationName,
                 timelines = uiState.timelines,
             )
@@ -83,24 +86,37 @@ private fun ClockScreen(
 }
 
 @Composable
-private fun Timeline(
+private fun TimelineContent(
     stationName: StationName,
     timelines: List<TimelineItem>,
 ) {
-    ScalingLazyColumn(state = rememberScalingLazyListState()) {
-        item {
-            Text(
-                text = stationName.name,
-                fontSize = WearOsTypography.Title.size,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(end = 8.dp)
-            )
-        }
-        itemsIndexed(timelines) { index, item ->
-            if (index == 0) {
-                FeaturedBusCard(timetableItem = item)
-            } else {
-                BusCard(timetableItem = item)
+    val state = rememberScalingLazyListState()
+    Scaffold(
+        vignette = {
+            Vignette(vignettePosition = VignettePosition.TopAndBottom)
+        },
+        positionIndicator = {
+            PositionIndicator(scalingLazyListState = state)
+        },
+        timeText = {
+            TimeText()
+        },
+    ) {
+        ScalingLazyColumn(state = state) {
+            item {
+                Text(
+                    text = stationName.name,
+                    fontSize = WearOsTypography.Title.size,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(end = 8.dp)
+                )
+            }
+            itemsIndexed(timelines) { index, item ->
+                if (index == 0) {
+                    FeaturedBusCard(timetableItem = item)
+                } else {
+                    BusCard(timetableItem = item)
+                }
             }
         }
     }
@@ -206,17 +222,11 @@ private fun PreviewBusCard() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 private fun PreviewTimeline() {
-    Timeline(
+    TimelineContent(
         stationName = StationName("takinoi"),
         timelines = listOf(
             previewTimelineTime,
             previewTimelineTime,
         )
     )
-}
-
-enum class WearOsTypography(val size: TextUnit) {
-    H1(18.sp),
-    Title(14.sp),
-    Body(10.sp),
 }
