@@ -47,6 +47,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.clock)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.wearos)
     debugImplementation(libs.bundles.wearos.debug)
