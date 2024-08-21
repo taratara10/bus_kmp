@@ -47,6 +47,10 @@ android {
 }
 
 dependencies {
+    implementation(projects.feature.clock)
+    implementation(projects.core.domain)
+    implementation(projects.core.model)
+    implementation(libs.kotlinx.datetime)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.wearos)
     debugImplementation(libs.bundles.wearos.debug)
