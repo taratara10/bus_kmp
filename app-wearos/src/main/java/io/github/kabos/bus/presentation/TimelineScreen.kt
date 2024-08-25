@@ -93,7 +93,10 @@ private fun TimelineScaffold(
             PositionIndicator(scalingLazyListState = state)
         },
         pageIndicator = {
-            HorizontalPageIndicator(pageIndicatorState = pageIndicatorState)
+            HorizontalPageIndicator(
+                pageIndicatorState = pageIndicatorState,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
         },
         timeText = {
             TimeText()
