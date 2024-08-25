@@ -1,8 +1,6 @@
 package io.github.kabos.bus.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -43,7 +41,6 @@ import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableCell
 import io.github.kabos.bus.feature.clock.ClockContract.UiAction
 import io.github.kabos.bus.feature.clock.ClockContract.UiState
-import io.github.kabos.bus.feature.clock.ClockViewModel
 import io.github.kabos.bus.feature.clock.TimelineItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -70,7 +67,7 @@ fun TimelineScreen(viewModel: TimelineViewModel) {
             modifier = Modifier.fillMaxSize(),
             state = state,
         ) { page ->
-            ClockScreen(
+            TimelineContent(
                 uiState = uiState[page],
                 onAction = viewModel::onAction,
             )
@@ -92,9 +89,7 @@ private fun TimelineScaffold(
             PositionIndicator(scalingLazyListState = state)
         },
         pageIndicator = {
-            HorizontalPageIndicator(
-                pageIndicatorState = pageIndicatorState,
-            )
+            HorizontalPageIndicator(pageIndicatorState = pageIndicatorState)
         },
         timeText = {
             TimeText()
@@ -104,7 +99,7 @@ private fun TimelineScaffold(
 }
 
 @Composable
-private fun ClockScreen(
+private fun TimelineContent(
     uiState: UiState,
     onAction: (UiAction) -> Unit,
 ) {
@@ -129,7 +124,7 @@ private fun ClockScreen(
                     onAction(UiAction.Reload)
                 }
             }
-            TimelineContent(
+            TimelineSection(
                 stationName = uiState.stationName,
                 timelines = uiState.timelines,
             )
@@ -138,7 +133,7 @@ private fun ClockScreen(
 }
 
 @Composable
-private fun TimelineContent(
+private fun TimelineSection(
     stationName: StationName,
     timelines: List<TimelineItem>,
 ) {
@@ -262,7 +257,7 @@ private fun PreviewBusCard() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 private fun PreviewTimeline() {
-    TimelineContent(
+    TimelineSection(
         stationName = StationName("takinoi"),
         timelines = listOf(
             previewTimelineTime,

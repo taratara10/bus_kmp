@@ -3,6 +3,7 @@ package io.github.kabos.bus.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.kabos.bus.core.domain.GetBusDepartureTimeUseCase
+import io.github.kabos.bus.core.domain.extension.now
 import io.github.kabos.bus.core.domain.mvi.MVI
 import io.github.kabos.bus.core.domain.mvi.mviDelegate
 import io.github.kabos.bus.core.domain.repository.DefaultTimetableRepository
@@ -13,7 +14,6 @@ import io.github.kabos.bus.feature.clock.ClockContract.UiAction
 import io.github.kabos.bus.feature.clock.ClockContract.UiState
 import io.github.kabos.bus.feature.clock.ClockContract.UiState.Init
 import io.github.kabos.bus.feature.clock.getTimeLine
-import io.github.kabos.bus.feature.clock.now
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 

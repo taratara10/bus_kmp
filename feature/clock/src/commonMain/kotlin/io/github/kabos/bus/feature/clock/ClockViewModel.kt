@@ -7,6 +7,7 @@ import com.github.michaelbull.result.andThen
 import com.github.michaelbull.result.onFailure
 import com.github.michaelbull.result.runCatching
 import io.github.kabos.bus.core.domain.GetBusDepartureTimeUseCase
+import io.github.kabos.bus.core.domain.extension.now
 import io.github.kabos.bus.core.domain.mvi.MVI
 import io.github.kabos.bus.core.domain.mvi.mviDelegate
 import io.github.kabos.bus.core.domain.repository.DefaultTimetableRepository
@@ -21,8 +22,6 @@ import io.github.kabos.bus.feature.clock.ClockContract.UiState.Init
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 
 interface ClockContract {
     sealed interface UiState {
@@ -124,19 +123,15 @@ class ClockViewModel : ViewModel(),
     }
 }
 
-private fun now(): LocalTime {
-    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
-//        .subtract(LocalTime(12, 0)).value
-}
-
-private fun getTimeLine(
+fun getTimeLine(
     stationName: StationName,
     timetable: List<TimetableCell>,
     now: LocalTime,
+    takeItem: Int = 5,
 ): UiState {
     val timelines = timetable
         .filter { timetable -> timetable.localTime > now } // get available bus
-        .take(5) // get latest 5 bus for display
+        .take(takeItem) // get latest 5 bus for display
         .mapIndexed { index, timetable -> // convert to TimelineItem
             TimelineItem.of(
                 now = now,
