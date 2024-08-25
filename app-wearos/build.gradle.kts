@@ -27,6 +27,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
     compileOptions {
@@ -53,5 +54,5 @@ dependencies {
     implementation(libs.kotlinx.datetime)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.bundles.wearos)
-    debugImplementation(libs.bundles.wearos.debug)
+    implementation(libs.bundles.wearos.debug)
 }
