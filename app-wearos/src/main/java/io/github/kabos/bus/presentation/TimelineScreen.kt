@@ -1,15 +1,20 @@
 package io.github.kabos.bus.presentation
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,7 +26,9 @@ import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
 import androidx.wear.compose.material.Card
+import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.MaterialTheme
+import androidx.wear.compose.material.PageIndicatorState
 import androidx.wear.compose.material.PositionIndicator
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.material.Text
@@ -34,25 +41,65 @@ import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableCell
 import io.github.kabos.bus.feature.clock.ClockContract.UiAction
 import io.github.kabos.bus.feature.clock.ClockContract.UiState
-import io.github.kabos.bus.feature.clock.ClockViewModel
 import io.github.kabos.bus.feature.clock.TimelineItem
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalTime
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ClockScreen(
-    viewModel: ClockViewModel,
-) {
+fun TimelineScreen(viewModel: TimelineViewModel) {
     val uiState by viewModel.uiState.collectAsState()
-    ClockScreen(
-        uiState = uiState,
-        onAction = viewModel::onAction,
+    val state = rememberPagerState(pageCount = { uiState.size })
+    val pagerScreenState = remember {
+        object : PageIndicatorState {
+            override val pageCount: Int
+                get() = state.pageCount
+            override val pageOffset: Float
+                get() = state.currentPageOffsetFraction
+            override val selectedPage: Int
+                get() = state.currentPage
+        }
+    }
+
+    TimelineScaffold(pageIndicatorState = pagerScreenState) {
+        HorizontalPager(
+            modifier = Modifier.fillMaxSize(),
+            state = state,
+        ) { page ->
+            TimelineContent(
+                uiState = uiState[page],
+                onAction = viewModel::onAction,
+            )
+        }
+    }
+}
+
+@Composable
+private fun TimelineScaffold(
+    pageIndicatorState: PageIndicatorState,
+    content: @Composable () -> Unit,
+) {
+    val state = rememberScalingLazyListState()
+    Scaffold(
+        vignette = {
+            Vignette(vignettePosition = VignettePosition.TopAndBottom)
+        },
+        positionIndicator = {
+            PositionIndicator(scalingLazyListState = state)
+        },
+        pageIndicator = {
+            HorizontalPageIndicator(pageIndicatorState = pageIndicatorState)
+        },
+        timeText = {
+            TimeText()
+        },
+        content = content,
     )
 }
 
 @Composable
-private fun ClockScreen(
+private fun TimelineContent(
     uiState: UiState,
     onAction: (UiAction) -> Unit,
 ) {
@@ -77,7 +124,7 @@ private fun ClockScreen(
                     onAction(UiAction.Reload)
                 }
             }
-            TimelineContent(
+            TimelineSection(
                 stationName = uiState.stationName,
                 timelines = uiState.timelines,
             )
@@ -86,37 +133,25 @@ private fun ClockScreen(
 }
 
 @Composable
-private fun TimelineContent(
+private fun TimelineSection(
     stationName: StationName,
     timelines: List<TimelineItem>,
 ) {
     val state = rememberScalingLazyListState()
-    Scaffold(
-        vignette = {
-            Vignette(vignettePosition = VignettePosition.TopAndBottom)
-        },
-        positionIndicator = {
-            PositionIndicator(scalingLazyListState = state)
-        },
-        timeText = {
-            TimeText()
-        },
-    ) {
-        ScalingLazyColumn(state = state) {
-            item {
-                Text(
-                    text = stationName.name,
-                    fontSize = WearOsTypography.Title.size,
-                    fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(end = 8.dp)
-                )
-            }
-            itemsIndexed(timelines) { index, item ->
-                if (index == 0) {
-                    FeaturedBusCard(timetableItem = item)
-                } else {
-                    BusCard(timetableItem = item)
-                }
+    ScalingLazyColumn(state = state) {
+        item {
+            Text(
+                text = stationName.name,
+                fontSize = WearOsTypography.Title.size,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+        }
+        itemsIndexed(timelines) { index, item ->
+            if (index == 0) {
+                FeaturedBusCard(timetableItem = item)
+            } else {
+                BusCard(timetableItem = item)
             }
         }
     }
@@ -222,7 +257,7 @@ private fun PreviewBusCard() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 private fun PreviewTimeline() {
-    TimelineContent(
+    TimelineSection(
         stationName = StationName("takinoi"),
         timelines = listOf(
             previewTimelineTime,

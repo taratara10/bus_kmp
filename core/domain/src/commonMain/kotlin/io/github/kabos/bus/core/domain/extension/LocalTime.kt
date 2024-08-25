@@ -4,7 +4,10 @@ import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Result
 import com.github.michaelbull.result.getOr
 import com.github.michaelbull.result.runCatching
+import kotlinx.datetime.Clock
 import kotlinx.datetime.LocalTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 /**
  * Subtracts the given [before] from this LocalTime, returning a new LocalTime.
@@ -39,4 +42,13 @@ fun LocalTime.tommss(): String {
         val second = this.second.toString().padStart(2, '0')
         "$minute:$second"
     }.getOr("")
+}
+
+/**
+ * @param subtractHour For debug. Subtract the given number of hours from the current time.
+ * @return Current time in LocalTime.
+ */
+fun now(subtractHour: Int = 0): LocalTime {
+    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
+        .subtract(LocalTime(0, 0)).value
 }
