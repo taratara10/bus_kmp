@@ -22,9 +22,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
 import androidx.wear.compose.foundation.lazy.rememberScalingLazyListState
+import androidx.wear.compose.foundation.rememberActiveFocusRequester
+import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
+import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.compose.material.Card
 import androidx.wear.compose.material.HorizontalPageIndicator
 import androidx.wear.compose.material.MaterialTheme
@@ -132,13 +136,21 @@ private fun TimelineContent(
     }
 }
 
+@OptIn(ExperimentalWearFoundationApi::class)
 @Composable
 private fun TimelineSection(
     stationName: StationName,
     timelines: List<TimelineItem>,
 ) {
-    val state = rememberScalingLazyListState()
-    ScalingLazyColumn(state = state) {
+    val scrollState = rememberScalingLazyListState()
+    val focusRequester = rememberActiveFocusRequester()
+    ScalingLazyColumn(
+        state = scrollState,
+        modifier = Modifier.rotaryScrollable(
+            behavior = RotaryScrollableDefaults.behavior(scrollableState = scrollState),
+            focusRequester = focusRequester,
+        )
+    ) {
         item {
             Text(
                 text = stationName.name,
