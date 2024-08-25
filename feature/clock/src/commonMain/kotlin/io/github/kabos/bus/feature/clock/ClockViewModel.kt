@@ -71,7 +71,7 @@ class ClockViewModel : ViewModel(),
         viewModelScope.launch {
             when (uiAction) {
                 UiAction.Initialize -> {
-                    getTimeLine(
+                    getTimeline(
                         stationName = selectedStation,
                         timetable = useCase.invoke(
                             stationName = selectedStation,
@@ -85,7 +85,7 @@ class ClockViewModel : ViewModel(),
                     updateUiState {
                         when (this) {
                             is UiState.Timeline -> {
-                                getTimeLine(
+                                getTimeline(
                                     stationName = this.stationName,
                                     timetable = this.timelines.map { it.timetableCell },
                                     now = now(),
@@ -123,15 +123,14 @@ class ClockViewModel : ViewModel(),
     }
 }
 
-fun getTimeLine(
+private fun getTimeline(
     stationName: StationName,
     timetable: List<TimetableCell>,
     now: LocalTime,
-    takeItem: Int = 5,
 ): UiState {
     val timelines = timetable
         .filter { timetable -> timetable.localTime > now } // get available bus
-        .take(takeItem) // get latest 5 bus for display
+        .take(5) // get latest 5 bus for display
         .mapIndexed { index, timetable -> // convert to TimelineItem
             TimelineItem.of(
                 now = now,
