@@ -1,6 +1,5 @@
 package io.github.kabos.bus.presentation
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,10 +10,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
 import androidx.wear.compose.foundation.lazy.itemsIndexed
@@ -50,7 +55,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalTime
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TimelineScreen(viewModel: TimelineViewModel) {
     val uiState by viewModel.uiState.collectAsState()
@@ -66,6 +70,30 @@ fun TimelineScreen(viewModel: TimelineViewModel) {
         }
     }
 
+    var isForeground by remember { mutableStateOf(true) }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    isForeground = true
+                    viewModel.onAction(UiAction.Reload)
+                }
+
+                Lifecycle.Event.ON_PAUSE -> {
+                    isForeground = false
+                }
+
+                else -> {}
+            }
+        }
+        lifecycle.addObserver(observer)
+
+        onDispose {
+            lifecycle.removeObserver(observer)
+        }
+    }
+
     TimelineScaffold(pageIndicatorState = pagerScreenState) {
         HorizontalPager(
             modifier = Modifier.fillMaxSize(),
@@ -74,6 +102,7 @@ fun TimelineScreen(viewModel: TimelineViewModel) {
             TimelineContent(
                 uiState = uiState[page],
                 onAction = viewModel::onAction,
+                isForeground = isForeground,
             )
         }
     }
@@ -107,6 +136,7 @@ private fun TimelineScaffold(
 
 @Composable
 private fun TimelineContent(
+    isForeground: Boolean,
     uiState: UiState,
     onAction: (UiAction) -> Unit,
 ) {
@@ -126,9 +156,11 @@ private fun TimelineContent(
 
         is UiState.Timeline -> {
             LaunchedEffect(uiState) {
-                launch {
-                    delay(1000)
-                    onAction(UiAction.Reload)
+                if (isForeground) {
+                    launch {
+                        delay(1000)
+                        onAction(UiAction.Reload)
+                    }
                 }
             }
             TimelineSection(
