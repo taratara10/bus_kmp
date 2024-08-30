@@ -77,7 +77,7 @@ fun TimelineScreen(viewModel: TimelineViewModel) {
             when (event) {
                 Lifecycle.Event.ON_RESUME -> {
                     isForeground = true
-                    viewModel.onAction(UiAction.Reload)
+                    viewModel.onAction(UiAction.Initialize)
                 }
 
                 Lifecycle.Event.ON_PAUSE -> {
