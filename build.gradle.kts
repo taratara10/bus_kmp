@@ -15,7 +15,12 @@ plugins {
 detekt {
     buildUponDefaultConfig = true
     config.setFrom(file("$rootDir/config/detekt/detekt.yml"))
-    source.setFrom("$rootDir/app-wearos")
+    source.setFrom(
+        "$rootDir/app-wearos",
+        "$rootDir/app-wasm",
+        "$rootDir/feature",
+        "$rootDir/core",
+    )
 }
 
 tasks.withType<Detekt>().configureEach {
