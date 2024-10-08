@@ -1,9 +1,9 @@
-# Bus_KMP
+# bus_kmp
 
 This is a Kotlin Multiplatform project targeting Android, iOS, Web.
 It is an app that displays bus schedules at the nearest bus stop in a rich format.
 
-Deployed page → https://taratara10.github.io/bus_KMP/
+Deployed page → https://taratara10.github.io/bus_kmp/
 
 ![screnshot](https://github.com/user-attachments/assets/7540be2a-1121-4909-a099-debce4f6224d)
 
