@@ -37,7 +37,9 @@ class MVIDelegate<UiState, UiAction, SideEffect> internal constructor(
     private val _sideEffect by lazy { Channel<SideEffect>() }
     override val sideEffect: Flow<SideEffect> by lazy { _sideEffect.receiveAsFlow() }
 
-    override fun onAction(uiAction: UiAction) {}
+    override fun onAction(uiAction: UiAction) {
+        /* nop */
+    }
 
     override fun updateUiState(newUiState: UiState) {
         _uiState.update { newUiState }

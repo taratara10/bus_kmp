@@ -50,5 +50,5 @@ fun LocalTime.tommss(): String {
  */
 fun now(subtractHour: Int = 0): LocalTime {
     return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
-        .subtract(LocalTime(0, 0)).value
+        .subtract(LocalTime(subtractHour, 0)).value
 }
