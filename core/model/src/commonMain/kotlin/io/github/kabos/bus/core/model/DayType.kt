@@ -8,15 +8,13 @@ import kotlinx.datetime.toLocalDateTime
 
 enum class DayType {
     Weekday,
-    Saturday,
     Holiday;
 
     companion object {
         fun of(clock: Clock): DayType {
             val dayOfWeek = clock.now().toLocalDateTime(TimeZone.currentSystemDefault()).dayOfWeek
             return when (dayOfWeek) {
-                SATURDAY -> Saturday
-                SUNDAY -> Holiday
+                SATURDAY, SUNDAY -> Holiday
                 else -> Weekday
             }
         }
