@@ -6,10 +6,10 @@ import kotlin.test.assertEquals
 
 class DayTypeTest {
     @Test
-    fun `ReturnsSaturday_WhenDateIsSaturday`() {
+    fun `ReturnsHoliday_WhenDateIsSaturday`() {
         val testClock = FixedClock(Instant.parse("2024-06-01T00:00:00+09:00"))
         assertEquals(
-            expected = DayType.Saturday,
+            expected = DayType.Holiday,
             actual = DayType.of(testClock),
         )
     }

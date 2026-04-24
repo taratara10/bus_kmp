@@ -21,7 +21,6 @@ class GetBusDepartureTimeUseCaseTest {
     private val baseTimetable = WeekTimetable(
         busRouteName = BusRouteName(departureStationName = StationName(name = ""), name = ""),
         weekday = emptyList(),
-        saturday = emptyList(),
         holiday = emptyList(),
     )
     private val baseTimetableRow = TimetableRow(hour = 0, minutes = listOf(0))
@@ -47,7 +46,6 @@ class GetBusDepartureTimeUseCaseTest {
             listOf(
                 baseTimetable.copy(
                     weekday = emptyList(),
-                    saturday = listOf(baseTimetableRow),
                     holiday = listOf(baseTimetableRow)
                 ),
             )
@@ -112,9 +110,6 @@ class GetBusDepartureTimeUseCaseTest {
                         TimetableRow(hour = 2, minutes = listOf(30)),
                         TimetableRow(hour = 18, minutes = listOf(30)),
                     ),
-                    saturday = listOf(
-                        TimetableRow(hour = 1, minutes = listOf(10)),
-                    ),
                     holiday = listOf(
                         TimetableRow(hour = 1, minutes = listOf(20)),
                     ),
@@ -125,7 +120,6 @@ class GetBusDepartureTimeUseCaseTest {
                         TimetableRow(hour = 2, minutes = listOf(0)),
                         TimetableRow(hour = 19, minutes = listOf(0)),
                     ),
-                    saturday = listOf(),
                     holiday = listOf(),
                 )
             )
