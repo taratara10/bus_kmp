@@ -6,7 +6,6 @@ import io.github.kabos.bus.core.domain.GetBusDepartureTimeUseCase
 import io.github.kabos.bus.core.domain.extension.now
 import io.github.kabos.bus.core.domain.mvi.MVI
 import io.github.kabos.bus.core.domain.mvi.mviDelegate
-import io.github.kabos.bus.core.domain.repository.DefaultTimetableRepository
 import io.github.kabos.bus.core.model.DayType
 import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableCell
@@ -22,11 +21,10 @@ import kotlinx.datetime.LocalTime
 // ベタ打ちであんまり良くない
 private val InitState = listOf(Init, Init)
 
-class TimelineViewModel :
-    ViewModel(),
+class TimelineViewModel(
+    private val useCase: GetBusDepartureTimeUseCase,
+) : ViewModel(),
     MVI<List<UiState>, UiAction, SideEffect> by mviDelegate(initialUiState = InitState) {
-    private val repository = DefaultTimetableRepository()
-    private val useCase = GetBusDepartureTimeUseCase(repository)
 
     override fun onAction(uiAction: UiAction) {
         viewModelScope.launch {

@@ -26,7 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.koin.compose.viewmodel.koinViewModel
 import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.feature.clock.ClockContract.SideEffect
 import io.github.kabos.bus.feature.clock.ClockContract.UiAction
@@ -37,7 +37,7 @@ import kotlinx.coroutines.launch
 // https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-viewmodel.html#using-viewmodel-in-common-code
 @Composable
 fun ClockScreen(
-    viewModel: ClockViewModel = viewModel { ClockViewModel() },
+    viewModel: ClockViewModel = koinViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val sideEffect = viewModel.sideEffect
