@@ -5,10 +5,10 @@ import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableRow
 import io.github.kabos.bus.core.model.Tsu07
 import io.github.kabos.bus.core.model.Tsu08
-import io.github.kabos.bus.core.model.WeekTimetable
+import io.github.kabos.bus.core.model.BusTimetable
 
 // https://www.navitime.co.jp/diagram/bus/00139553/00032180/0/
-internal val takinoiTsu07: WeekTimetable = WeekTimetable(
+internal val takinoiTsu07: BusTimetable = BusTimetable(
     busRouteName = BusRouteName(
         departureStationName = StationName.takinoi,
         name = Tsu07,
@@ -42,7 +42,7 @@ internal val takinoiTsu07: WeekTimetable = WeekTimetable(
     ),
 )
 
-internal val takinoiTsu08 = WeekTimetable(
+internal val takinoiTsu08 = BusTimetable(
     busRouteName = BusRouteName(
         departureStationName = StationName.takinoi,
         name = Tsu08,
