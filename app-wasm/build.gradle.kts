@@ -33,6 +33,7 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
+            implementation(projects.core.domain)
             implementation(projects.feature.clock)
             implementation(libs.koin.core)
             implementation(libs.koin.compose)

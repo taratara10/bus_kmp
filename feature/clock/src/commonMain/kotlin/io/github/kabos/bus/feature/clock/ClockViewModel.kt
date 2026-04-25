@@ -10,7 +10,7 @@ import io.github.kabos.bus.core.domain.GetBusDepartureTimeUseCase
 import io.github.kabos.bus.core.domain.extension.now
 import io.github.kabos.bus.core.domain.mvi.MVI
 import io.github.kabos.bus.core.domain.mvi.mviDelegate
-import io.github.kabos.bus.core.domain.repository.DefaultTimetableRepository
+import io.github.kabos.bus.core.domain.repository.TimetableRepository
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.DayType
 import io.github.kabos.bus.core.model.StationName
@@ -57,12 +57,12 @@ interface ClockContract {
     }
 }
 
-class ClockViewModel : ViewModel(),
+class ClockViewModel(
+    private val repository: TimetableRepository,
+    private val useCase: GetBusDepartureTimeUseCase,
+) : ViewModel(),
     MVI<UiState, UiAction, SideEffect> by mviDelegate(initialUiState = Init) {
 
-    // todo DI
-    private val repository = DefaultTimetableRepository()
-    private val useCase = GetBusDepartureTimeUseCase(repository)
     private val stationNames = listOf(StationName.takinoi, StationName.tsudanuma)
 
     private var selectedStation = stationNames.first()
