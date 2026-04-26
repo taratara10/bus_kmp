@@ -5,7 +5,7 @@ package io.github.kabos.bus.presentation
 import androidx.compose.ui.platform.UriHandler
 import com.github.michaelbull.result.Ok
 import io.github.kabos.bus.core.domain.GetBusDepartureTimeUseCase
-import io.github.kabos.bus.core.domain.repository.DummyTimetableRepository
+import io.github.kabos.bus.core.domain.repository.FakeTimetableRepository
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.BusTimetable
 import io.github.kabos.bus.core.model.StationName
@@ -31,7 +31,7 @@ import kotlin.test.assertTrue
 class TimelineViewModelTest {
 
     private val testDispatcher = UnconfinedTestDispatcher()
-    private lateinit var repository: DummyTimetableRepository
+    private lateinit var repository: FakeTimetableRepository
     private lateinit var useCase: GetBusDepartureTimeUseCase
     private lateinit var fakeClock: FakeClock
     private lateinit var viewModel: TimelineViewModel
@@ -44,7 +44,7 @@ class TimelineViewModelTest {
         java.util.TimeZone.setDefault(java.util.TimeZone.getTimeZone("UTC"))
 
         Dispatchers.setMain(testDispatcher)
-        repository = DummyTimetableRepository()
+        repository = FakeTimetableRepository()
         useCase = GetBusDepartureTimeUseCase(repository)
         // UTC Monday 2024-06-03 10:00:00 → local time 10:00, DayType = Weekday
         fakeClock = FakeClock(Instant.parse("2024-06-03T10:00:00Z"))

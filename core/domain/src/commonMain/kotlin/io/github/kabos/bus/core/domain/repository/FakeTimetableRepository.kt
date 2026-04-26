@@ -9,7 +9,7 @@ import io.github.kabos.bus.core.model.BusTimetable
 /**
  * Debug Repository
  */
-class DummyTimetableRepository : TimetableRepository {
+class FakeTimetableRepository : TimetableRepository {
     var resultGetTimetable: Result<List<BusTimetable>, Exception> = Ok(emptyList())
 
     override fun getTimetableForEachRoute(stationName: StationName): Result<List<BusTimetable>, Exception> {

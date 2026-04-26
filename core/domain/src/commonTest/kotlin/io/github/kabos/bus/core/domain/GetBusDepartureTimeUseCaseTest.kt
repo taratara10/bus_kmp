@@ -2,7 +2,7 @@ package io.github.kabos.bus.core.domain
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import io.github.kabos.bus.core.domain.repository.DummyTimetableRepository
+import io.github.kabos.bus.core.domain.repository.FakeTimetableRepository
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.DayType
 import io.github.kabos.bus.core.model.StationName
@@ -16,7 +16,7 @@ import kotlin.test.assertEquals
 
 class GetBusDepartureTimeUseCaseTest {
 
-    private lateinit var repository: DummyTimetableRepository
+    private lateinit var repository: FakeTimetableRepository
     private lateinit var useCase: GetBusDepartureTimeUseCase
     private val baseTimetable = BusTimetable(
         busRouteName = BusRouteName(departureStationName = StationName(name = ""), name = ""),
@@ -27,7 +27,7 @@ class GetBusDepartureTimeUseCaseTest {
 
     @BeforeTest
     fun setup() {
-        repository = DummyTimetableRepository()
+        repository = FakeTimetableRepository()
         useCase = GetBusDepartureTimeUseCase(repository)
     }
 
