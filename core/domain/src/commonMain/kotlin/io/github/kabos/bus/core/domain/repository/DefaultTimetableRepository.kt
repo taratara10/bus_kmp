@@ -13,10 +13,10 @@ import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.Tsu0506
 import io.github.kabos.bus.core.model.Tsu07
 import io.github.kabos.bus.core.model.Tsu08
-import io.github.kabos.bus.core.model.WeekTimetable
+import io.github.kabos.bus.core.model.BusTimetable
 
 class DefaultTimetableRepository : TimetableRepository {
-    override fun getTimetableForEachRoute(stationName: StationName): Result<List<WeekTimetable>, Exception> {
+    override fun getTimetableForEachRoute(stationName: StationName): Result<List<BusTimetable>, Exception> {
         return when (stationName) {
             StationName.takinoi -> Ok(
                 listOf(

@@ -2,13 +2,13 @@ package io.github.kabos.bus.core.domain
 
 import com.github.michaelbull.result.Err
 import com.github.michaelbull.result.Ok
-import io.github.kabos.bus.core.domain.repository.DummyTimetableRepository
+import io.github.kabos.bus.core.domain.repository.FakeTimetableRepository
 import io.github.kabos.bus.core.model.BusRouteName
 import io.github.kabos.bus.core.model.DayType
 import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableCell
 import io.github.kabos.bus.core.model.TimetableRow
-import io.github.kabos.bus.core.model.WeekTimetable
+import io.github.kabos.bus.core.model.BusTimetable
 import kotlinx.datetime.LocalTime
 import kotlin.test.BeforeTest
 import kotlin.test.Test
@@ -16,9 +16,9 @@ import kotlin.test.assertEquals
 
 class GetBusDepartureTimeUseCaseTest {
 
-    private lateinit var repository: DummyTimetableRepository
+    private lateinit var repository: FakeTimetableRepository
     private lateinit var useCase: GetBusDepartureTimeUseCase
-    private val baseTimetable = WeekTimetable(
+    private val baseTimetable = BusTimetable(
         busRouteName = BusRouteName(departureStationName = StationName(name = ""), name = ""),
         weekday = emptyList(),
         holiday = emptyList(),
@@ -27,7 +27,7 @@ class GetBusDepartureTimeUseCaseTest {
 
     @BeforeTest
     fun setup() {
-        repository = DummyTimetableRepository()
+        repository = FakeTimetableRepository()
         useCase = GetBusDepartureTimeUseCase(repository)
     }
 
@@ -104,7 +104,7 @@ class GetBusDepartureTimeUseCaseTest {
             BusRouteName(departureStationName = StationName.takinoi, name = "second")
         repository.resultGetTimetable = Ok(
             listOf(
-                WeekTimetable(
+                BusTimetable(
                     busRouteName = firstBusRoute,
                     weekday = listOf(
                         TimetableRow(hour = 2, minutes = listOf(30)),
@@ -114,7 +114,7 @@ class GetBusDepartureTimeUseCaseTest {
                         TimetableRow(hour = 1, minutes = listOf(20)),
                     ),
                 ),
-                WeekTimetable(
+                BusTimetable(
                     busRouteName = secondBusRoute,
                     weekday = listOf(
                         TimetableRow(hour = 2, minutes = listOf(0)),

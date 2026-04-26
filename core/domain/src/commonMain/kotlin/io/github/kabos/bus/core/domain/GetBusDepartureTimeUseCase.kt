@@ -8,7 +8,7 @@ import io.github.kabos.bus.core.model.DayType
 import io.github.kabos.bus.core.model.StationName
 import io.github.kabos.bus.core.model.TimetableCell
 import io.github.kabos.bus.core.model.TimetableRow
-import io.github.kabos.bus.core.model.WeekTimetable
+import io.github.kabos.bus.core.model.BusTimetable
 import kotlinx.datetime.LocalTime
 
 class GetBusDepartureTimeUseCase(private val timetableRepository: TimetableRepository) {
@@ -17,7 +17,7 @@ class GetBusDepartureTimeUseCase(private val timetableRepository: TimetableRepos
         dayType: DayType,
     ): List<TimetableCell> {
         return timetableRepository.getTimetableForEachRoute(stationName)
-            .map { routes: List<WeekTimetable> -> routes.flatMap { it.toTimetableCell(dayType) } }
+            .map { routes: List<BusTimetable> -> routes.flatMap { it.toTimetableCell(dayType) } }
             .map { cells: List<TimetableCell> -> cells.sortedBy { it.localTime } }
             .getOr(emptyList())
     }
@@ -36,7 +36,7 @@ private fun List<TimetableRow>.convertToLocalTime(): List<LocalTime> {
         .mapNotNull { it.getOr(null) } // List<LocalTime>
 }
 
-private fun WeekTimetable.toTimetableCell(dayType: DayType): List<TimetableCell> {
+private fun BusTimetable.toTimetableCell(dayType: DayType): List<TimetableCell> {
     return this.getDayTimetable(dayType)
         .convertToLocalTime()
         .map { TimetableCell(busRouteName = this.busRouteName, localTime = it) }

@@ -2,7 +2,7 @@ package io.github.kabos.bus.core.model
 
 import kotlinx.datetime.LocalTime
 
-data class WeekTimetable(
+data class BusTimetable(
     val busRouteName: BusRouteName,
     val weekday: List<TimetableRow>,
     val holiday: List<TimetableRow>,

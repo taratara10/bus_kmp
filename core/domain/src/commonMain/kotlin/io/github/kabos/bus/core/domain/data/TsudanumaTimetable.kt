@@ -6,10 +6,10 @@ import io.github.kabos.bus.core.model.TimetableRow
 import io.github.kabos.bus.core.model.Tsu0506
 import io.github.kabos.bus.core.model.Tsu07
 import io.github.kabos.bus.core.model.Tsu08
-import io.github.kabos.bus.core.model.WeekTimetable
+import io.github.kabos.bus.core.model.BusTimetable
 
 // https://www.navitime.co.jp/diagram/bus/00043845/00032183/1/
-internal val tsudanumaTsu0506 = WeekTimetable(
+internal val tsudanumaTsu0506 = BusTimetable(
     busRouteName = BusRouteName(
         departureStationName = StationName.tsudanuma,
         name = Tsu0506,
@@ -39,7 +39,7 @@ internal val tsudanumaTsu0506 = WeekTimetable(
 )
 
 // https://www.navitime.co.jp/diagram/bus/00043845/00032187/1/
-internal val tsudanumaTsu07 = WeekTimetable(
+internal val tsudanumaTsu07 = BusTimetable(
     busRouteName = BusRouteName(
         departureStationName = StationName.tsudanuma,
         name = Tsu07,
@@ -80,7 +80,7 @@ internal val tsudanumaTsu07 = WeekTimetable(
 )
 
 // https://www.navitime.co.jp/diagram/bus/00043845/00032180/1/
-internal val tsudanumaTsu08 = WeekTimetable(
+internal val tsudanumaTsu08 = BusTimetable(
     busRouteName = BusRouteName(
         departureStationName = StationName.tsudanuma,
         name = Tsu08,
