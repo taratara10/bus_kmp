@@ -23,6 +23,7 @@ private val InitState = listOf(Init, Init)
 
 class TimelineViewModel(
     private val useCase: GetBusDepartureTimeUseCase,
+    private val clock: Clock = Clock.System,
 ) : ViewModel(),
     MVI<List<UiState>, UiAction, SideEffect> by mviDelegate(initialUiState = InitState) {
 
@@ -35,12 +36,11 @@ class TimelineViewModel(
                             stationName = station,
                             timetable = useCase.invoke(
                                 stationName = station,
-                                dayType = DayType.of(Clock.System),
+                                dayType = DayType.of(clock),
                             ),
-                            now = now(),
+                            now = now(clock),
                         )
                     }.let { updateUiState(it) }
-
                 }
 
                 is UiAction.Reload -> {
@@ -53,7 +53,7 @@ class TimelineViewModel(
                                     getTimeline(
                                         stationName = uiState.stationName,
                                         timetable = uiState.timelines.map { it.timetableCell },
-                                        now = now(),
+                                        now = now(clock),
                                     )
                                 }
                             }

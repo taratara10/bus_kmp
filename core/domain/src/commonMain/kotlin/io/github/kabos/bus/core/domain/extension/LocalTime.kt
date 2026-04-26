@@ -45,10 +45,11 @@ fun LocalTime.tommss(): String {
 }
 
 /**
+ * @param clock Clock instance to use. Defaults to Clock.System.
  * @param subtractHour For debug. Subtract the given number of hours from the current time.
  * @return Current time in LocalTime.
  */
-fun now(subtractHour: Int = 0): LocalTime {
-    return Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
+fun now(clock: Clock = Clock.System, subtractHour: Int = 0): LocalTime {
+    return clock.now().toLocalDateTime(TimeZone.currentSystemDefault()).time
         .subtract(LocalTime(subtractHour, 0)).value
 }
